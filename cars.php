@@ -6,47 +6,90 @@
  * and open the template in the editor.
  */
 
-require_once 'connection.php';
+//require_once 'connection.php';
 require_once("db.php");
-
-$query = "SELECT * FROM car";
-$result = mysqli_query($db_server, $query);
-
-if (!$result) {
-    die("Database access failed: " . mysqli_error());
-}
-    
-$search_results="";
-
-$row_count = mysqli_num_rows($result);
-
-    for ($j = 0; $j < $row_count; ++$j) {
-        $row = mysqli_fetch_array($result); //fetch the next row     
-        $search_results.="<p>" . $row['ID'] . $row['Color'] . "</p>";
-    }
+require_once("views/find_car.php");
+require_once("views/rental_history.php");
+require_once("views/rented_cars.php");
 
 
-
-
-
-$logonSuccess = false;
-
-// verify user's credentials
-if ($_SERVER['REQUEST_METHOD'] == "POST") {
-    $logonSuccess = (carDB::getInstance()->verify_authentication($_POST['name'], $_POST['password']));
-    if ($logonSuccess == true) {
-        session_start();
-        $_SESSION['name'] = $_POST['name'];
-        header('Location: cars.php');
-        exit;
-    }
-}
-
-
-
-
-
-
-
-mysqli_close($db_server);
 ?>
+
+<html>
+    <head>
+        <title>My Account</title>
+        <meta charset="UTF-8">
+        <link rel="stylesheet" type="text/css" href="style/general.css">
+        <link rel="stylesheet" type="text/css" href="style/style.css">
+        <script type="text/javascript"  src='script/general/general.js'></script>
+        <script type="text/javascript"  src='script/pages/cars.js'></script>
+    </head>
+    <body onload="init();">
+        <div class="container">
+
+            <div class="account">
+                <div class="welcome">
+
+                    <a onclick="logout();">Logout</a>
+                    <a href="" id="username"></a> 
+                    <img id="user_loading" class="user_loading_hidden" src="images/loading.gif">
+                </div>
+
+                <img src="images/car.PNG">
+                <p>Rent a Car</p>
+
+            </div>
+            <div  class="tabs" id="tabs">
+                <div onclick="show_tab(this)" class="tab_pressed"> Find Car
+                    <div class="tab_detail"> 
+                        <div class="search_bar">
+                            <input  id="search_field" class="search_field" type="text"><div onclick="find_car(0, 'Year');" class="search_button"><img src="images/glass.png"></div>
+                        </div>
+                        <img id="find_car_loading" class="loading_hidden" src="images/loading.gif">
+                        <div id="search_results">
+
+                        </div>
+                        <?php
+                        echo $find_car_view;
+                        echo $search_results
+                        ?>
+                    </div>
+                </div>
+
+                <div onclick="show_tab(this)" class="tab"> Rented Cars
+
+                    <div class="tab_detail_hidden"> 
+                        <img id="rented_car_loading" class="loading_hidden" src="images/loading.gif">
+                        <div id="rented_cars">
+                        </div>
+                        <?php
+                        echo $rented_cars_view;
+                        //echo $search_results
+                        ?>
+                    </div>
+                </div>
+                <div onclick="show_tab(this)" class="tab"> Rental History
+
+                    <div class="tab_detail_hidden"> 
+                        <img id="returned_car_loading" class="loading_hidden" src="images/loading.gif">
+                        <div id="returned_cars">
+
+                        </div>
+                        <?php
+                        echo $rental_history_view;
+                        //echo $search_results
+                        ?>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <div id="background" class="msg_box_background">
+        </div>
+        <div id="message_box" class="message_box">
+            <img onclick="close_message()" src="images/close_icon.png">
+            <div class="message" id="message"></div>
+            <img id="message_loading" class="loading_hidden" src="images/loading.gif">
+            <div onclick="close_message()" class="close_button">Ok</div>
+        </div>
+    </body>
+</html>

@@ -48,6 +48,11 @@ class carDB extends mysqli {
         
     }
     
+    // pre: $id
+    public function get_all_cars(){
+        return $this->query("SELECT * FROM car INNER JOIN carspecs on carspecs.ID = car.ID");
+    }
+    
     // pre: carID 
     // TODO: JOIN car and carspec
     public function get_cars_by_car_id($carID) {

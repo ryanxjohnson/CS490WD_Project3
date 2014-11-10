@@ -19,7 +19,8 @@ function login() {
             $("loading").className="loading_hidden";
         }
     };
-    ajax.open("POST", "car_rental/pages/login.php");
+    //ajax.open("POST", "car_rental/pages/login.php");
+    ajax.open("POST", "login.php");
     ajax.send(formData);
 }
 
