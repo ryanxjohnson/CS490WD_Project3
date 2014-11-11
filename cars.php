@@ -29,7 +29,7 @@ require_once("views/rented_cars.php");
             <div class="account">
 
                 <div class="welcome">
-                    
+
                     <a onclick="logout();">Logout</a>
                     <a href="" id="username"></a> 
                     <img id="user_loading" class="user_loading_hidden" src="images/loading.gif">

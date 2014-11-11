@@ -228,7 +228,7 @@ div.search_item .car_rent{
     left:600px;
     width:90px;
     font-size:20px;
-    opacity:0;
+    opacity:0; //change back to 0
 }
 
 

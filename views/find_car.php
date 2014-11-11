@@ -30,8 +30,9 @@ function build_item(&$result, &$row_count) {
         $row = mysqli_fetch_array($result); //fetch the next row   
         $search_results.=
                 "<div class='search_item'>"
-                . "<button class='car_rent'>Rent Car</button>" 
+         //       . "<div class='car_rent'><button class='car_rent'>Rent Car</button></div>" 
                 . "<img src='images/car.png'>" // placeholder until we get blob to work
+                . "<img src='data:" .$row['picture_type'] . ";base64," .base64_encode($row['picture']) . "'>"
                 . "<div class='car_make_background'>"
                 . "<div class='car_make'>" . $row['Make'] . "</div>"
                 . "<div class='car_model'>" . $row['Model'] . " | " . $row['Year'] . "</div>"
@@ -41,7 +42,7 @@ function build_item(&$result, &$row_count) {
                 . "<div class='" . $row['Color'] . "'>"
                 . "</div>"
                 . "</div>" // end car color
-            
+                . "<div class='car_rent'>Rent Car</div>" 
                 . "</div>"; // end search_item
     }
   //  msqli_free_results; //free up some memory?
