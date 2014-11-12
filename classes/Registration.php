@@ -36,6 +36,12 @@ class Registration
      */
     private function registerNewUser()
     {
+        /*
+         * user_name -> ID
+         * user_email not needed, but need Name, phone, address
+         */
+        
+        
         if (empty($_POST['user_name'])) {
             $this->errors[] = "Empty Username";
         } elseif (empty($_POST['user_password_new']) || empty($_POST['user_password_repeat'])) {
