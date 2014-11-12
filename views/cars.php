@@ -5,14 +5,7 @@
  * To change this template file, choose Tools | Templates
  * and open the template in the editor.
  */
-
-//require_once 'connection.php';
-//require_once("db.php");
 require_once("find_car.php");
-require_once("views/rental_history.php");
-require_once("views/rented_cars.php");
-
-
 ?>
 
 <html>
@@ -27,11 +20,12 @@ require_once("views/rented_cars.php");
     <body class="body" onload="init();">
         <div class="container">
             <div class="account">
-
+                
                 <div class="welcome">
-
-                    <a onclick="logout();">Logout</a>
-                    <a href="" id="username"></a> 
+                    
+<!--                    <a onclick="logout();">Logout</a>-->
+                    <a href="index.php?logout">Log Out</a>
+                    <a href="" id="username">Hi, <?php echo $_SESSION['user_name']; ?></a> 
                     <img id="user_loading" class="user_loading_hidden" src="images/loading.gif">
                 </div>
 
@@ -66,7 +60,7 @@ require_once("views/rented_cars.php");
                         <div id="rented_cars">
                         </div>
                         <?php
-                        echo $rented_cars_view;
+                        //echo $rented_cars_view;
                         //echo $search_results
                         ?>
                     </div>
@@ -79,7 +73,7 @@ require_once("views/rented_cars.php");
 
                         </div>
                         <?php
-                        echo $rental_history_view;
+                        //echo $rental_history_view;
                         //echo $search_results
                         ?>
                     </div>

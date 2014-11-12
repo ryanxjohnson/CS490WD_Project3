@@ -22,7 +22,7 @@ if (version_compare(PHP_VERSION, '5.3.7', '<')) {
 
 // include the configs / constants for the database connection
 require_once("config/db_connection.php");
-
+require_once ("connection_old.php");
 // load the login class
 require_once("classes/Login.php");
 
@@ -32,12 +32,12 @@ $login = new Login();
 
 // ... ask if we are logged in here:
 if ($login->isUserLoggedIn() == true) {
-    // the user is logged in. you can do whatever you want here.
-    // for demonstration purposes, we simply show the "you are logged in" view.
-    include("views/logged_in.php");
+
+    //include("views/cars.php");
+    include("views/logged_in.php"); 
 
 } else {
-    // the user is not logged in. you can do whatever you want here.
-    // for demonstration purposes, we simply show the "you are not logged in" view.
+    
+    // we don't change the page, we just show an error message
     include("views/not_logged_in.php");
 }
