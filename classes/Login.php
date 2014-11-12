@@ -70,15 +70,15 @@ class Login
                 // username field)
                 
                 
-                                $sql = "SELECT user_name, user_password_hash
-                        FROM users
-                        WHERE user_name = '" . $user_name . "';";
+//                                $sql = "SELECT user_name, user_password_hash
+//                        FROM users
+//                        WHERE user_name = '" . $user_name . "';";
                 
                 
                 
-//                $sql = "SELECT ID, Password
-//                        FROM customer
-//                        WHERE ID = '" . $user_name . "';";
+                $sql = "SELECT ID, Password
+                        FROM customer
+                        WHERE ID = '" . $user_name . "';";
                 $result_of_login_check = $this->db_connection->query($sql);
 
                 // if this user exists

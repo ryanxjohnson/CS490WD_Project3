@@ -6,8 +6,6 @@
  * and open the template in the editor.
  */
 require_once '/../connection_old.php';
-//require_once '/../db.php';
-//$query = carDB::getInstance()->get_all_cars();
 $query = "SELECT * FROM car INNER JOIN carspecs on carspecs.ID = car.carspecsID";
 
 $result = mysqli_query($db_server, $query);

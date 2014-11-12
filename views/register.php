@@ -44,7 +44,7 @@ if (isset($registration)) {
                 </div>
                  <div class="item">
                     <label for="login_input_address">Address</label>
-                    <input id="login_input_address" class="login_input" type="text" name="phone_number" />
+                    <input id="login_input_address" class="login_input" type="text" name="address" />
                 </div>
                 <div class="item">
                     <label for="login_input_password_new">Password</label>
