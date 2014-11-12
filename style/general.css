@@ -155,3 +155,7 @@ div.tab_detail_hidden{
     background-color:rgb(235,235,235);
     cursor: pointer;
 }
+
+.body {
+    height: 0px;
+}

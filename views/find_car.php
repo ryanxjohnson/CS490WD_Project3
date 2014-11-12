@@ -15,7 +15,7 @@ $result = mysqli_query($db_server, $query);
 if (!$result) {
     die("Database access failed: " . mysqli_error());
 }
-$find_car_view = "Find Car View";
+//$find_car_view = "Find Car View";
 //$search_results="";
 
 $row_count = mysqli_num_rows($result);
@@ -29,21 +29,23 @@ function build_item(&$result, &$row_count) {
     for ($j = 0; $j < $row_count; ++$j) {
         $row = mysqli_fetch_array($result); //fetch the next row   
         $search_results.=
-                "<div class='search_item'>"
-         //       . "<div class='car_rent'><button class='car_rent'>Rent Car</button></div>" 
-                . "<img src='images/car.png'>" // placeholder until we get blob to work
+                
+                 "<div class='search_item'>"
+
                 . "<img src='data:" .$row['picture_type'] . ";base64," .base64_encode($row['picture']) . "'>"
                 . "<div class='car_make_background'>"
                 . "<div class='car_make'>" . $row['Make'] . "</div>"
                 . "<div class='car_model'>" . $row['Model'] . " | " . $row['Year'] . "</div>"
                 . "</div>" // end make_background
-                . "<div class='car_size'>Size: " . $row['Size'] . "</div>"
+                . "<div class='car_size'>Size: " . $row['Size'] . "</div>"                                
                 . "<div class='car_color'>Color: "
                 . "<div class='" . $row['Color'] . "'>"
                 . "</div>"
                 . "</div>" // end car color
                 . "<div class='car_rent'>Rent Car</div>" 
                 . "</div>"; // end search_item
+                
+
     }
   //  msqli_free_results; //free up some memory?
     return $search_results;

@@ -7,7 +7,7 @@
  */
 
 //require_once 'connection.php';
-require_once("db.php");
+//require_once("db.php");
 require_once("views/find_car.php");
 require_once("views/rental_history.php");
 require_once("views/rented_cars.php");
@@ -24,7 +24,7 @@ require_once("views/rented_cars.php");
         <script type="text/javascript"  src='script/general/general.js'></script>
         <script type="text/javascript"  src='script/pages/cars.js'></script>
     </head>
-    <body onload="init();">
+    <body class="body" onload="init();">
         <div class="container">
             <div class="account">
 
@@ -47,13 +47,16 @@ require_once("views/rented_cars.php");
                         </div>
                         <img id="find_car_loading" class="loading_hidden" src="images/loading.gif">
                         <div id="search_results">
-
-                        </div>
                         <?php
-                        echo $find_car_view;
+                        //echo $find_car_view;
                         echo $search_results
                         ?>
+                        </div>
+                        
+                        
+                  
                     </div>
+                    
                 </div>
 
                 <div onclick="show_tab(this)" class="tab"> Rented Cars
@@ -83,6 +86,9 @@ require_once("views/rented_cars.php");
                 </div>
             </div>
         </div>
+        
+        
+        
         <div id="background" class="msg_box_background">
         </div>
         <div id="message_box" class="message_box">

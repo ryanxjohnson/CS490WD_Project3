@@ -12,6 +12,7 @@ and open the template in the editor.
         <link rel="stylesheet" type="text/css" href="style/style.css">
         <script type="text/javascript"  src='script/general/general.js'></script>
         <script type="text/javascript"  src='script/pages/cars.js'></script>
+        <?php require_once("/views/find_car.php"); ?>
     </head>
     <body onload="init();">
         <div class="container">
@@ -36,16 +37,14 @@ and open the template in the editor.
                         </div>
                         <img id="find_car_loading" class="loading_hidden" src="images/loading.gif">
                         <div id="search_results">
-
+                          <?php
+                          $search_results;
+                          ?>
                         </div>
-                        <?php
-                        echo $search_results
-                        ?>
+
                     </div>
                 </div>
-
                 <div onclick="show_tab(this)" class="tab"> Rented Cars
-
                     <div class="tab_detail_hidden"> 
                         <img id="rented_car_loading" class="loading_hidden" src="images/loading.gif">
                         <div id="rented_cars">
