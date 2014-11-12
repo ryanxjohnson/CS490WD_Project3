@@ -35,6 +35,7 @@ class carDB extends mysqli {
 
     // private constructor
     private function __construct() {
+       
         parent::__construct($this->$db_hostname, $this->$db_username, $this->$db_password, $this->$db_database);
         if (mysqli_connect_error()) {
             exit('Connect Error (' . mysqli_connect_errno() . ') '
@@ -44,8 +45,12 @@ class carDB extends mysqli {
     }
     
     // pre: username, password
-    public function verify_authentication(){
-        
+    public function verify_authentication($name, $password){
+                $name = $this->real_escape_string($name);
+        $password = $this->real_escape_string($password);
+        $result = $this->query("SELECT 1 FROM customer WHERE ID = '"
+                        . $name . "' AND Password = '" . $password . "'");
+        return $result->data_seek(0);
     }
     
     // pre: $id
@@ -76,4 +81,12 @@ class carDB extends mysqli {
         
     }
     
+    
+    public function get_available_cars() {
+        
+    }
+    
+    public function get_rented_cars(){
+        
+    }
 }
