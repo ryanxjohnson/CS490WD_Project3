@@ -5,11 +5,26 @@
  * To change this template file, choose Tools | Templates
  * and open the template in the editor.
  */
-require_once '/../connection.php';
-
-
 
 $rental_history_view = "Rental History View";
 
 ?>
+
+<html>
+    <head>
+        
+    </head>
+    
+    <body>
+        <div class="search_item">        
+            Rental History View
+        <?php
+        $rental_history_view;
+        ?>
+        </div>
+        
+    </body>
+    
+    
+</html>
 

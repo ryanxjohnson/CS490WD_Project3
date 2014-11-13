@@ -55,8 +55,9 @@ class Login {
                 if ($result_of_login_check->num_rows == 1) {
                     $result_row = $result_of_login_check->fetch_object();
 
-                    if (!password_verify($_POST['user_password'], $result_row->Password)) { // no bueno
-                        $_SESSION['user_name'] = $result_row->ID;
+                    $user_password_hash = md5($_POST['user_password']);
+                    if ( $user_password_hash == $result_row->Password) {
+                    $_SESSION['user_name'] = $result_row->ID;
                         $_SESSION['name'] = $result_row->Name;
                         
                         $_SESSION['user_login_status'] = 1;

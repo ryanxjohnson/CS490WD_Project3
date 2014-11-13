@@ -1,10 +1,4 @@
 <?php
-
-/* 
- * To change this license header, choose License Headers in Project Properties.
- * To change this template file, choose Tools | Templates
- * and open the template in the editor.
- */
 require_once("find_car.php");
 ?>
 
@@ -42,8 +36,7 @@ require_once("find_car.php");
                         <img id="find_car_loading" class="loading_hidden" src="images/loading.gif">
                         <div id="search_results">
                         <?php
-                        //echo $find_car_view;
-                        echo $search_results // might be better to include(partial_view) here?
+                        echo $search_results; // might be better to include("find_car.php"); here?                        
                         ?>
                         </div>
                         
@@ -60,8 +53,7 @@ require_once("find_car.php");
                         <div id="rented_cars">
                         </div>
                         <?php
-                        //echo $rented_cars_view;
-                        //echo $search_results
+                        include("rented_cars.php")
                         ?>
                     </div>
                 </div>
@@ -73,8 +65,7 @@ require_once("find_car.php");
 
                         </div>
                         <?php
-                        //echo $rental_history_view;
-                        //echo $search_results
+                        include("rental_history.php");
                         ?>
                     </div>
                 </div>

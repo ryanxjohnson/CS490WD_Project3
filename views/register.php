@@ -48,11 +48,11 @@ if (isset($registration)) {
                 </div>
                 <div class="item">
                     <label for="login_input_password_new">Password</label>
-                    <input id="login_input_password_new" class="login_input" type="password" name="user_password_new" pattern=".{6,}" required autocomplete="off" />
+                    <input id="login_input_password_new" class="login_input" type="password" name="user_password_new" required autocomplete="off" />
                 </div>
                 <div class="item">
                     <label for="login_input_password_repeat">Password</label>
-                    <input id="login_input_password_repeat" class="login_input" type="password" name="user_password_repeat" pattern=".{6,}" required autocomplete="off" />
+                    <input id="login_input_password_repeat" class="login_input" type="password" name="user_password_repeat" required autocomplete="off" />
                     <input class="button" type="submit"  name="register" value="Register" />
                 </div>
             </form>
