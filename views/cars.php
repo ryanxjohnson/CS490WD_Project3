@@ -25,7 +25,7 @@ require_once("find_car.php");
                     
 <!--                    <a onclick="logout();">Logout</a>-->
                     <a href="index.php?logout">Log Out</a>
-                    <a href="" id="username">Hi, <?php echo $_SESSION['user_name']; ?></a> 
+                    <a href="" id="username">Hi, <?php echo $_SESSION['name']; ?></a> 
                     <img id="user_loading" class="user_loading_hidden" src="images/loading.gif">
                 </div>
 
@@ -43,7 +43,7 @@ require_once("find_car.php");
                         <div id="search_results">
                         <?php
                         //echo $find_car_view;
-                        echo $search_results
+                        echo $search_results // might be better to include(partial_view) here?
                         ?>
                         </div>
                         
