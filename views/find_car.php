@@ -8,6 +8,16 @@
 require_once '/../connection_old.php';
 $query = "SELECT * FROM car INNER JOIN carspecs on carspecs.ID = car.carspecsID";
 
+/*
+ * 
+ * if (isset($_POST['search']) && trim($_POST['search'])!=""){ // trim spaces and make sure not empty
+ * $data=$_POST['search'];
+ * }
+ * $query = "SELECT * 
+ *      FROM car INNER JOIN carspecs on carspecs.ID = car.carspecsID
+ *          WHERE car_make like '%data%' OR car_model like '%data%'";
+ */
+
 $result = mysqli_query($db_server, $query);
 
 if (!$result) {

@@ -16,7 +16,6 @@ require_once("find_car.php");
             <div class="account">
                 
                 <div class="welcome">
-                    
 <!--                    <a onclick="logout();">Logout</a>-->
                     <a href="index.php?logout">Log Out</a>
                     <a href="" id="username">Hi, <?php echo $_SESSION['name']; ?></a> 
