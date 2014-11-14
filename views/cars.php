@@ -1,5 +1,5 @@
 <?php
-require_once("find_car.php");
+
 ?>
 
 <html>
@@ -35,7 +35,8 @@ require_once("find_car.php");
                         <img id="find_car_loading" class="loading_hidden" src="images/loading.gif">
                         <div id="search_results">
                         <?php
-                        echo $search_results; // might be better to include("find_car.php"); here?                        
+                        require_once("find_car.php"); // render this at init?
+                        //echo $search_results; // might be better to include("find_car.php"); here?                        
                         ?>
                         </div>
                         

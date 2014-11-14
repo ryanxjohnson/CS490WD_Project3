@@ -1,12 +1,11 @@
 <?php
+require_once("/../config/db_connection.php");
+require_once("/../classes/Car.php");
 
-/*
- * To change this license header, choose License Headers in Project Properties.
- * To change this template file, choose Tools | Templates
- * and open the template in the editor.
- */
-require_once '/../connection_old.php';
-$query = "SELECT * FROM car INNER JOIN carspecs on carspecs.ID = car.carspecsID";
+$cars = new Car();
+
+$query = $cars->get_all_cars();
+//$query = "SELECT * FROM car INNER JOIN carspecs on carspecs.ID = car.carspecsID";
 
 /*
  * 
@@ -15,17 +14,18 @@ $query = "SELECT * FROM car INNER JOIN carspecs on carspecs.ID = car.carspecsID"
  * }
  * $query = "SELECT * 
  *      FROM car INNER JOIN carspecs on carspecs.ID = car.carspecsID
- *          WHERE car_make like '%data%' OR car_model like '%data%'";
+ *          WHERE car_make like '%data%' OR car_model like '%data%'"; // or year or color or size
  */
 
 $result = mysqli_query($db_server, $query);
+//$result = mysqli_query($db_server, $query);
 
 if (!$result) {
     die("Database access failed: " . mysqli_error());
 }
 $row_count = mysqli_num_rows($result);
 
-$search_results = build_item($result, $row_count);
+echo $search_results = build_item($result, $row_count);
 
 function build_item(&$result, &$row_count) {
     $search_results = "";
