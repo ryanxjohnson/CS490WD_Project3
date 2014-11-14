@@ -20,20 +20,20 @@ class Car {
             $this->errors[] = $this->db_connection->error;
         }
 
-        if (!$this->db_connection->connect_errno);
-    } // end constructor
-   
+        if (!$this->db_connection->connect_errno)
+            $this->errors[] = $this->db_connection->error;
+    }
 
     // pre: no params.
     public function get_all_cars() {
         return "SELECT * FROM car INNER JOIN carspecs on carspecs.ID = car.CarSpecsID";
     }
-    
+
     // pre: need $data from _POST['search_field']
     public function get_cars_by_search($data) {
-    return "SELECT * FROM car INNER JOIN carspecs on carspecs.ID = car.CarSpecsID 
-        WHERE Make LIKE '%$data%' OR Model LIKE '%$data%'
-        OR Year LIKE '%$data%' OR Color LIKE '%$data%' or Size LIKE '%$data%' ";
+        return "SELECT * FROM car INNER JOIN carspecs on carspecs.ID = car.CarSpecsID 
+        WHERE car.status = 1 AND (Make LIKE '%$data%' OR Model LIKE '%$data%'
+        OR Year LIKE '%$data%' OR Color LIKE '%$data%' or Size LIKE '%$data%')";
     }
 
     // pre: carID 
@@ -47,7 +47,6 @@ class Car {
         $name = $this->real_escape_string($name);
         $car = $this->query("SELECT ID FROM customer WHERE Name = '"
                 . $name . "'");
-
         if ($car->num_rows > 0) {
             $row = $car->fetch_row();
             return $row[0];
@@ -55,24 +54,54 @@ class Car {
             return null;
     }
 
-    // pre: rent button was clicked
-    public function updated_car_rented() {
+    // pre: rent button was clicked.
+    // parameter: car.ID of the car that button was clicked
+    public function update_car_rented($ID) {
         return "UPDATE car SET status = 2 WHERE ID = 1";
     }
-    
-      // pre: return button was clicked
-    public function updated_car_available() {
+
+    // pre: return button was clicked
+    public function update_car_available() {
         return "UPDATE car SET status = 1 WHERE ID = 2";
     }
 
     // pre: no params. car status must be 1
     public function get_available_cars() {
-        return "SELECT * FROM car INNER JOIN carspecs on carspecs.ID = car.ID WHERE car.status = 1";
+        return "SELECT * FROM car INNER JOIN carspecs on carspecs.ID = car.carspecsID WHERE car.status = 1";
     }
 
     // pre: status = 2
     public function get_rented_cars() {
-        return "SELECT * FROM car INNER JOIN carspecs on carspecs.ID = car.ID WHERE car.status = 2";
+        return "SELECT * FROM car INNER JOIN carspecs on carspecs.ID = car.carspecsID WHERE car.status = 2";
     }
+
+    // pre: parameter is  $row variable
+    public function build_car($row) {
+        $cars_found = "";
+        $current_status = $row['status'];
+                if ($current_status == 1) {
+            $event = "Rent";
+        } elseif ($current_status == 2) {
+            $event = "Return";
+        }
+        $cars_found.= "<div class='search_item'>" . "<img src='data:" . $row['picture_type'] . ";base64," . base64_encode($row['picture']) . "'>"
+                . "<div class='car_make_background'>" . "<div class='car_make'>" . $row['Make'] . "</div>"
+                . "<div class='car_model'>" . $row['Model'] . " | " . $row['Year'] . "</div>" . "</div>" // end make_background
+                . "<div class='car_size'>Size: " . $row['Size'] . "</div>" . "<div class='car_color'>Color: "
+                . "<div class='" . $row['Color'] . "'>" . "</div>" . "</div>" // end car color
+                . "<div class='car_rent'>" . $event . " Car</div>" . "</div>"; // end search_item  
+        return $cars_found;
+    }
+
+    // pre: need query object
+    public function get_result($query) {
+        $result = mysqli_query($this->db_connection, $query);
+
+        if (!$result) {
+            die("Database access failed: " . mysqli_error());
+        }
+        return $result;
+    }
+    
 
 }

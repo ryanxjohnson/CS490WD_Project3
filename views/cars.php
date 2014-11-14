@@ -30,7 +30,7 @@
                         <div class="search_bar">
                             <form method="post" >
                                 <input  id="search_field" name="search_field" class="search_field" type="text">
-                                <div class="search_button" input type="submit" > 
+                                <div class="search_button" type="submit" > 
                                    
                                     <img src="images/glass.png">
                                 </div>
