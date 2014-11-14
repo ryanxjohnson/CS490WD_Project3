@@ -26,16 +26,14 @@ class Car {
 
     // pre: no params.
     public function get_all_cars() {
-        return "SELECT * FROM car INNER JOIN carspecs on carspecs.ID = car.ID";
+        return "SELECT * FROM car INNER JOIN carspecs on carspecs.ID = car.CarSpecsID";
     }
     
     // pre: need $data from _POST['search_field']
     public function get_cars_by_search($data) {
-        return "SELECT * "
-        .      "FROM car "
-        .      "INNER JOIN carspecs on carspecs.ID = car.ID ";
-//        .      "WHERE car_make like '%data%' OR car_model like '%data%'"
-//        .      "OR year like '%data%' OR color like '%data%' or size like '%data%' ";
+    return "SELECT * FROM car INNER JOIN carspecs on carspecs.ID = car.CarSpecsID 
+        WHERE Make LIKE '%$data%' OR Model LIKE '%$data%'
+        OR Year LIKE '%$data%' OR Color LIKE '%$data%' or Size LIKE '%$data%' ";
     }
 
     // pre: carID 

@@ -1,6 +1,4 @@
-<?php
-
-?>
+<?php ?>
 
 <html>
     <head>
@@ -14,9 +12,9 @@
     <body class="body" onload="init();">
         <div class="container">
             <div class="account">
-                
+
                 <div class="welcome">
-<!--                    <a onclick="logout();">Logout</a>-->
+                    <!--                    <a onclick="logout();">Logout</a>-->
                     <a href="index.php?logout">Log Out</a>
                     <a href="" id="username">Hi, <?php echo $_SESSION['name']; ?></a> 
                     <img id="user_loading" class="user_loading_hidden" src="images/loading.gif">
@@ -30,13 +28,19 @@
                 <div onclick="show_tab(this)" class="tab_pressed"> Find Car
                     <div class="tab_detail"> 
                         <div class="search_bar">
-                            <input  id="search_field" class="search_field" type="text"><div onclick="find_car(0, 'Year');" class="search_button"><img src="images/glass.png"></div>
+                            <form method="post" >
+                                <input  id="search_field" name="search_field" class="search_field" type="text">
+                                <div class="search_button" input type="submit" > 
+                                   
+                                    <img src="images/glass.png">
+                                </div>
+                            </form>
                         </div>
                         <img id="find_car_loading" class="loading_hidden" src="images/loading.gif">
                         <div id="search_results">
-                        <?php
-                        require_once("find_car.php");                 
-                        ?>
+<?php
+require_once("find_car.php");
+?>
                         </div>
                     </div>
                 </div>
@@ -46,9 +50,9 @@
                         <img id="rented_car_loading" class="loading_hidden" src="images/loading.gif">
                         <div id="rented_cars">
                         </div>
-                        <?php
-                        include("rented_cars.php")
-                        ?>
+<?php
+include("rented_cars.php")
+?>
                     </div>
                 </div>
                 <div onclick="show_tab(this)" class="tab"> Rental History
@@ -57,16 +61,16 @@
                         <div id="returned_cars">
 
                         </div>
-                        <?php
-                        include("rental_history.php");
-                        ?>
+<?php
+include("rental_history.php");
+?>
                     </div>
                 </div>
             </div>
         </div>
-        
-        
-        
+
+
+
         <div id="background" class="msg_box_background">
         </div>
         <div id="message_box" class="message_box">
