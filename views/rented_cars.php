@@ -1,29 +1,11 @@
 <?php
+require_once("/../config/db_connection.php");
+require_once("/../classes/Car.php");
 
-/* 
- * To change this license header, choose License Headers in Project Properties.
- * To change this template file, choose Tools | Templates
- * and open the template in the editor.
- */
-$rented_cars_view = "Rented Cars View";
+$rented_cars = new Car();
+echo $rented_cars_view = "Rented Cars View";
 
+$query = $rented_cars->get_rented_cars();
+ 
 
-?>
-
-<html>
-    <head>
-        
-    </head>
-    
-    <body>
-        <div class="search_item">        
-            Rented Cars View
-        <?php
-        $rented_cars_view;
-        ?>
-        </div>
-        
-    </body>
-    
-    
-</html>
+// TODO: query and display rented cars

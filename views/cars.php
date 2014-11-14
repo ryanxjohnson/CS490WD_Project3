@@ -35,17 +35,11 @@
                         <img id="find_car_loading" class="loading_hidden" src="images/loading.gif">
                         <div id="search_results">
                         <?php
-                        require_once("find_car.php"); // render this at init?
-                        //echo $search_results; // might be better to include("find_car.php"); here?                        
+                        require_once("find_car.php");                 
                         ?>
                         </div>
-                        
-                        
-                  
                     </div>
-                    
                 </div>
-
                 <div onclick="show_tab(this)" class="tab"> Rented Cars
 
                     <div class="tab_detail_hidden"> 
@@ -58,7 +52,6 @@
                     </div>
                 </div>
                 <div onclick="show_tab(this)" class="tab"> Rental History
-
                     <div class="tab_detail_hidden"> 
                         <img id="returned_car_loading" class="loading_hidden" src="images/loading.gif">
                         <div id="returned_cars">

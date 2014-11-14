@@ -22,18 +22,20 @@ class Car {
 
         if (!$this->db_connection->connect_errno);
     } // end constructor
-    
-        public static function getInstance() {
-        if (!self::$instance instanceof self) {
-            self::$instance = new self;
-        }
-        return self::$instance;
-    }
-    
+   
 
-    // pre: $id
+    // pre: no params.
     public function get_all_cars() {
         return "SELECT * FROM car INNER JOIN carspecs on carspecs.ID = car.ID";
+    }
+    
+    // pre: need $data from _POST['search_field']
+    public function get_cars_by_search($data) {
+        return "SELECT * "
+        .      "FROM car "
+        .      "INNER JOIN carspecs on carspecs.ID = car.ID ";
+//        .      "WHERE car_make like '%data%' OR car_model like '%data%'"
+//        .      "OR year like '%data%' OR color like '%data%' or size like '%data%' ";
     }
 
     // pre: carID 
@@ -55,18 +57,24 @@ class Car {
             return null;
     }
 
-    public function update_status() {
-        
+    // pre: rent button was clicked
+    public function updated_car_rented() {
+        return "UPDATE car SET status = 2 WHERE ID = 1";
+    }
+    
+      // pre: return button was clicked
+    public function updated_car_available() {
+        return "UPDATE car SET status = 1 WHERE ID = 2";
     }
 
-    // status = 1
+    // pre: no params. car status must be 1
     public function get_available_cars() {
-        
+        return "SELECT * FROM car INNER JOIN carspecs on carspecs.ID = car.ID WHERE car.status = 1";
     }
 
-    // status = 2
+    // pre: status = 2
     public function get_rented_cars() {
-        
+        return "SELECT * FROM car INNER JOIN carspecs on carspecs.ID = car.ID WHERE car.status = 2";
     }
 
 }
