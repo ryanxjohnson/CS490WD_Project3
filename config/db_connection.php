@@ -6,20 +6,21 @@
  * and open the template in the editor.
  */
 
+// This is easier to use among our Classes
 define("DB_HOST", "localhost");
 define("DB_NAME", "cars");
 define("DB_USER", "root");
 define("DB_PASS", "");
 
 
-  $db_hostname = 'localhost';
-  $db_database = "cars";
-  $db_username = "root";
-  $db_password = "";
-  
-  $db_server = mysqli_connect($db_hostname, $db_username,$db_password);
-mysqli_select_db($db_server,$db_database) or die("Unable to select db: " . mysqli_errno());
-
-if (!$db_server)
-    die("Unable to connect to MySQL: " . mysqli_error());
+//  $db_hostname = 'localhost';
+//  $db_database = "cars";
+//  $db_username = "root";
+//  $db_password = "";
+//  
+//  $db_server = mysqli_connect($db_hostname, $db_username,$db_password);
+//mysqli_select_db($db_server,$db_database) or die("Unable to select db: " . mysqli_errno());
+//
+//if (!$db_server)
+//    die("Unable to connect to MySQL: " . mysqli_error());
 

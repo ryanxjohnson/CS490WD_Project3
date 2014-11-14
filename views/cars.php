@@ -38,6 +38,7 @@
                         </div>
                         <img id="find_car_loading" class="loading_hidden" src="images/loading.gif">
                         <div id="search_results">
+                            
 <?php
 require_once("find_car.php");
 ?>

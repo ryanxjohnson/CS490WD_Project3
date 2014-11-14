@@ -37,7 +37,6 @@ class Car {
     }
 
     // pre: carID 
-    // TODO: JOIN car and carspec
     public function get_cars_by_car_id($carID) {
         return $this->query("SELECT ID, Make, Model FROM carspecs WHERE carspecs.ID=" . $carID);
     }
@@ -79,7 +78,7 @@ class Car {
     public function build_car($row) {
         $cars_found = "";
         $current_status = $row['status'];
-                if ($current_status == 1) {
+        if ($current_status == 1) {
             $event = "Rent";
         } elseif ($current_status == 2) {
             $event = "Return";
@@ -93,7 +92,6 @@ class Car {
         return $cars_found;
     }
 
-    // pre: need query object
     public function get_result($query) {
         $result = mysqli_query($this->db_connection, $query);
 
@@ -102,6 +100,15 @@ class Car {
         }
         return $result;
     }
-    
+
+    public function print_results($result, $object) {
+        //$result= $object->$query;
+        $all_results = "";
+        for ($j = 0; $j < mysqli_num_rows($result); ++$j) {
+            $row = mysqli_fetch_array($result); //fetch the next row 
+            $all_results.= $object->build_car($row);
+        }
+        return $all_results;
+    }
 
 }
