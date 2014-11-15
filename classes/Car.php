@@ -60,13 +60,12 @@ class Car {
 
     // pre: what do we need
     public function get_rental_history() {
-        return "";
+        return "SELECT * FROM rental";
     }
     
-    
-    
-    
-    
+    public function update_rental_history() {
+        
+    }
     
     public function print_results($query, $object) {
         $result = $object->get_result($query);
@@ -76,6 +75,10 @@ class Car {
             $all_results.= $object->build_car($row);
         }
         return $all_results;
+    }
+    
+    public function print_rental_history() {
+        
     }
 
     // pre: need $query string
