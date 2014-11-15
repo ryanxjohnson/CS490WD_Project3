@@ -21,12 +21,7 @@ class Registration
 
     private function registerNewUser()
     {
-                // refactor validate_fields()
-            if (!empty($_POST['user_name'])
-            && !empty($_POST['user_password_new'])
-            && !empty($_POST['user_password_repeat'])
-            && ($_POST['user_password_new'] === $_POST['user_password_repeat'])
-        ) 
+                if($this->validate_fields())
             {
                 
                 // TODO: Move db connection to constructor (or superclass)
@@ -72,5 +67,15 @@ class Registration
         } else {
             $this->errors[] = "unknown error occurred.";
         }
+    }
+    
+    public function validate_fields() {
+                   if (!empty($_POST['user_name'])
+            && !empty($_POST['user_password_new'])
+            && !empty($_POST['user_password_repeat'])
+            && ($_POST['user_password_new'] === $_POST['user_password_repeat'])
+        )
+                       return true;      
+        
     }
 }

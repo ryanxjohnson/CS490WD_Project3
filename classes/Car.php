@@ -36,34 +36,6 @@ class Car {
         OR Year LIKE '%$data%' OR Color LIKE '%$data%' or Size LIKE '%$data%')";
     }
 
-    // pre: carID 
-    public function get_cars_by_car_id($carID) {
-        return $this->query("SELECT ID, Make, Model FROM carspecs WHERE carspecs.ID=" . $carID);
-    }
-
-    // pre: customer.Name
-    public function get_customer_id_by_name($name) {
-        $name = $this->real_escape_string($name);
-        $car = $this->query("SELECT ID FROM customer WHERE Name = '"
-                . $name . "'");
-        if ($car->num_rows > 0) {
-            $row = $car->fetch_row();
-            return $row[0];
-        } else
-            return null;
-    }
-
-    // pre: rent button was clicked.
-    // parameter: car.ID of the car that button was clicked
-    public function update_car_as_rented($ID) {
-        return "UPDATE car SET status = 2 WHERE ID = 1";
-    }
-
-    // pre: return button was clicked
-    public function update_car_as_available() {
-        return "UPDATE car SET status = 1 WHERE ID = 2";
-    }
-
     // pre: no params. car status must be 1
     public function get_available_cars() {
         return "SELECT * FROM car INNER JOIN carspecs on carspecs.ID = car.carspecsID WHERE car.status = 1";
@@ -72,6 +44,38 @@ class Car {
     // pre: status = 2
     public function get_rented_cars() {
         return "SELECT * FROM car INNER JOIN carspecs on carspecs.ID = car.carspecsID WHERE car.status = 2";
+    }
+    
+    // pre: rent button was clicked.
+    // parameter: car.ID of the car that button was clicked
+    public function update_car_as_rented($ID) {
+        return "UPDATE car SET status = 2 WHERE ID = 1";
+    }
+
+    // pre: return button was clicked
+    // parameter: car.ID of the car that button was clicked
+    public function update_car_as_available() {
+        return "UPDATE car SET status = 1 WHERE ID = 2";
+    }
+
+    public function print_results($query, $object) {
+        $result = $object->get_result($query);
+        $all_results = "";
+        for ($j = 0; $j < mysqli_num_rows($result); ++$j) {
+            $row = mysqli_fetch_array($result); //fetch the next row 
+            $all_results.= $object->build_car($row);
+        }
+        return $all_results;
+    }
+
+    // pre: need $query string
+    public function get_result($query) {
+        $result = mysqli_query($this->db_connection, $query);
+
+        if (!$result) {
+            die("Database access failed: " . mysqli_error());
+        }
+        return $result;
     }
 
     // pre: parameter is  $row variable TODO: This isn't classy
@@ -88,28 +92,10 @@ class Car {
                 . "<div class='car_model'>" . $row['Model'] . " | " . $row['Year'] . "</div>" . "</div>" // end make_background
                 . "<div class='car_size'>Size: " . $row['Size'] . "</div>" . "<div class='car_color'>Color: "
                 . "<div class='" . $row['Color'] . "'>" . "</div>" . "</div>" // end car color
-                . "<div class='car_rent'>" . $event . " Car</div>" . "</div>"; // end search_item  
+                . "<div class='car_rent'>" . $event . " Car</div>" 
+                . "</div>"; // end search_item  
         return $cars_found;
     }
 
-    // pre: need $query string
-    public function get_result($query) {
-        $result = mysqli_query($this->db_connection, $query);
-
-        if (!$result) {
-            die("Database access failed: " . mysqli_error());
-        }
-        return $result;
-    }
-
-    public function print_results($query, $object) {
-        $result=$object->get_result($query);
-        $all_results = "";
-        for ($j = 0; $j < mysqli_num_rows($result); ++$j) {
-            $row = mysqli_fetch_array($result); //fetch the next row 
-            $all_results.= $object->build_car($row);
-        }
-        return $all_results;
-    }
-
 }
+// onclick='alert(" . $row['Model'] . ")'

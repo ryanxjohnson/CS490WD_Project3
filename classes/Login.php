@@ -14,12 +14,10 @@ class Login {
     public $messages = array();
 
     public function __construct() {
-        // create/read session, absolutely necessary
         session_start();
         if (isset($_GET["logout"])) {
             $this->doLogout();
         }
-        // login via post data (if user just submitted a login form)
         elseif (isset($_POST["login"])) {
             $this->dologinWithPostData();
         }
@@ -34,25 +32,20 @@ class Login {
         } elseif (!empty($_POST['user_name']) && !empty($_POST['user_password'])) {
 
             //TODO: Move db connection to constructor (or superclass)
-            // create a database connection, using the constants from config/db_connection.php (which we loaded in index.php)
+            // create a database connection, using the constants from config/db_connection.php (which is loaded in index.php)
             $this->db_connection = new mysqli(DB_HOST, DB_USER, DB_PASS, DB_NAME);
 
             if (!$this->db_connection->set_charset("utf8")) {
                 $this->errors[] = $this->db_connection->error;
             }
-
             if (!$this->db_connection->connect_errno) {
 
                 // dump the POST stuff
                 $user_name = $this->db_connection->real_escape_string($_POST['user_name']);
-
-                $sql = "SELECT ID, Name, Password
-                        FROM customer
-                        WHERE ID = '" . $user_name . "';";
-                
+                $sql = $this->get_user_by_id($user_name);                
                 $result_of_login_check = $this->db_connection->query($sql);
 
-                // if this user exists
+                // if the user exists in db
                 if ($result_of_login_check->num_rows == 1) {
                     $result_row = $result_of_login_check->fetch_object();
 
@@ -82,7 +75,6 @@ class Login {
         // delete the session of the user
         $_SESSION = array();
         session_destroy();
-        // return a little feeedback message
         $this->messages[] = "You have been logged out.";
     }
 
@@ -91,8 +83,14 @@ class Login {
         if (isset($_SESSION['user_login_status']) AND $_SESSION['user_login_status'] == 1) {
             return true;
         }
-        // default return
         return false;
+    }
+    
+    // pre: need userID
+    public function get_user_by_id($user_name) {
+        return "SELECT ID, Name, Password
+                        FROM customer
+                        WHERE ID = '" . $user_name . "'";
     }
 
 }
