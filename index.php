@@ -9,6 +9,6 @@ if ($login->isUserLoggedIn() == true) {
     include("views/cars.php");
 
 } else {
-    // we don't change the page, we just show an error message
+    // show'em to the door
     include("views/login.php");
 }

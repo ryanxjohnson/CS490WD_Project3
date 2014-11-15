@@ -1,10 +1,5 @@
 <?php
 
-/*
- * To change this license header, choose License Headers in Project Properties.
- * To change this template file, choose Tools | Templates
- * and open the template in the editor.
- */
 
 class Car {
 
@@ -84,9 +79,10 @@ class Car {
         //date($format, $timestamp);
     }
 
-    /*   */
+    /***** HELPER FUNCTIONS FOR VIEWS  *****/
 
-    //pre: already queried. parameter: query and function
+    //pre: already queried with instantiated object. 
+    //parameters: query string and function
     public function print_results($query, $function) {
         $result = $this->get_result($query);
         $all_results = "";
@@ -106,20 +102,32 @@ class Car {
         return $result;
     }
 
+    // Builds html for Find Car
     // pre: parameter is  $row variable TODO: This isn't classy
     // rename to build_available_car($row)
     public function build_searched_car($row) {
         $cars_found = "";
-        $cars_found.= "<div class='search_item'>" . "<img src='data:" . $row['picture_type'] . ";base64," . base64_encode($row['picture']) . "'>"
-                . "<div class='car_make_background'>" . "<div class='car_make'>" . $row['Make'] . "</div>"
-                . "<div class='car_model'>" . $row['Model'] . " | " . $row['Year'] . "</div>" . "</div>" // end make_background
-                . "<div class='car_size'>Size: " . $row['Size'] . "</div>" . "<div class='car_color'>Color: "
-                . "<div class='" . $row['Color'] . "'>" . "</div>" . "</div>" // end car color
-                . "<div class='car_rent'> Rent Car</div>"
-                . "</div>"; // end search_item  
-        return $cars_found;
+        return $cars_found.=" 
+        <div class='search_item'>
+            <img src='data:" . $row['picture_type'] . ";base64," . base64_encode($row['picture']) . "'>
+                 <div class='car_make_background'>
+                <div class='car_make'>" . $row['Make'] . "
+                </div>
+                <div class='car_model'>" . $row['Model'] . " | " . $row['Year'] . "
+                </div>
+            </div> 
+            <div class='car_size'>Size: " . $row['Size'] . "
+            </div>
+            <div class='car_color'>Color: 
+                <div class='" . $row['Color'] . "'> 
+            </div> 
+        </div>
+        <div class='car_rent'> Rent Car
+        </div>
+    </div>";
     }
 
+    // builds html for Rented Cars and Rental History
     public function build_tainted_car($row) {
         $cars_found = "";
         $current_status = $row['status'];
@@ -135,8 +143,8 @@ class Car {
 
         $z_date = date_format($x_date, "l, F d, Y ");
 
-        $cars_found.="
-                    <tr>
+        return $cars_found.="
+            <tr>
                 <td class='img'>
                 <img src='data:" . $row['picture_type'] . ";base64," . base64_encode($row['picture']) . "'>
                 </td>
@@ -162,9 +170,7 @@ class Car {
                     </div>
                 </td>
                    " . $show_button . "                
-            </tr>
-        ";
-        return $cars_found;
+            </tr>";
     }
 
 }

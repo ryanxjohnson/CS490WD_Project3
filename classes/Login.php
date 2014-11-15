@@ -7,77 +7,70 @@
  */
 
 class Login {
+
     private $db_connection = null;
-
     public $errors = array();
-
     public $messages = array();
 
     public function __construct() {
         session_start();
-        if (isset($_GET["logout"])) {
-            $this->doLogout();
+
+        // start the database connection... is it bad to connect here?
+        $this->db_connection = new mysqli(DB_HOST, DB_USER, DB_PASS, DB_NAME);
+        if (!$this->db_connection->set_charset("utf8")) {
+            $this->errors[] = $this->db_connection->error;
         }
-        elseif (isset($_POST["login"])) {
-            $this->dologinWithPostData();
+        if (isset($_GET["logout"])) {
+            $this->Logout();
+        } elseif (isset($_POST["login"])) {
+            $this->loginWithPostData();
         }
     }
 
-    private function dologinWithPostData() {
-        // check login form contents
-        if (empty($_POST['user_name'])) {
-            $this->errors[] = "Username field was empty.";
-        } elseif (empty($_POST['user_password'])) {
-            $this->errors[] = "Password field was empty.";
-        } elseif (!empty($_POST['user_name']) && !empty($_POST['user_password'])) {
-
-            //TODO: Move db connection to constructor (or superclass)
-            // create a database connection, using the constants from config/db_connection.php (which is loaded in index.php)
-            $this->db_connection = new mysqli(DB_HOST, DB_USER, DB_PASS, DB_NAME);
-
-            if (!$this->db_connection->set_charset("utf8")) {
-                $this->errors[] = $this->db_connection->error;
-            }
+    private function loginWithPostData() {
+        if ($this->validate_form() == true) {
             if (!$this->db_connection->connect_errno) {
 
                 // dump the POST stuff
                 $user_name = $this->db_connection->real_escape_string($_POST['user_name']);
-                $sql = $this->get_user_by_id($user_name);                
-                $result_of_login_check = $this->db_connection->query($sql);
+                $user_password_hash = md5($_POST['user_password']);
+
+                $query = $this->get_user_by_username($user_name);
+                $result_for_login_check = //$this->get_result($query);
+                        
+                        $this->db_connection->query($query);
 
                 // if the user exists in db
-                if ($result_of_login_check->num_rows == 1) {
-                    $result_row = $result_of_login_check->fetch_object();
+                if ($result_for_login_check->num_rows == 1) {
 
-                    $user_password_hash = md5($_POST['user_password']);
-                    
-                    if ( $user_password_hash == $result_row->Password) {
-                    $_SESSION['user_name'] = $result_row->ID;
-                        $_SESSION['name'] = $result_row->Name;
-                        
+                    $row = $result_for_login_check->fetch_object();
+
+                    // load SESSION variable so we know who does stuff
+                    if ($user_password_hash == $row->Password) {
+                        $_SESSION['user_name'] = $row->ID;
+                        $_SESSION['name'] = $row->Name;
                         $_SESSION['user_login_status'] = 1;
                     } else {
                         $this->errors[] = "Wrong password. Try again.";
                     }
-                } else {
+                } 
+                
+                else {
                     $this->errors[] = "This user does not exist.";
                 }
-            } else {
+            } 
+            else {
                 $this->errors[] = "Database connection problem.";
             }
         }
     }
 
-    /**
-     * perform the logout
-     */
-    public function doLogout() {
+    public function Logout() {
         // delete the session of the user
         $_SESSION = array();
         session_destroy();
         $this->messages[] = "You have been logged out.";
     }
-
 
     public function isUserLoggedIn() {
         if (isset($_SESSION['user_login_status']) AND $_SESSION['user_login_status'] == 1) {
@@ -85,12 +78,36 @@ class Login {
         }
         return false;
     }
-    
+
     // pre: need userID
-    public function get_user_by_id($user_name) {
+    public function get_user_by_username($user_name) {
         return "SELECT ID, Name, Password
                         FROM customer
                         WHERE ID = '" . $user_name . "'";
     }
+
+    public function validate_form() {
+        // check login form contents
+        if (empty($_POST['user_name'])) {
+            $this->errors[] = "Username field was empty.";
+        } elseif (empty($_POST['user_password'])) {
+            $this->errors[] = "Password field was empty.";
+        } elseif (!empty($_POST['user_name']) && !empty($_POST['user_password'])) {
+
+            return true;
+        }
+        return false;
+    }
+    
+ 
+            // pre: need $query string
+    public function get_result($query) {
+        $result = mysqli_query($this->db_connection, $query);
+        if (!$result) {
+            die("Database access failed: " . mysqli_error());
+        }
+        return $result;
+    }
+  
 
 }
