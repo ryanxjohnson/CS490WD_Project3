@@ -1,10 +1,10 @@
 <?php
 require_once("/../classes/Car.php");
-/* 
- * To change this license header, choose License Headers in Project Properties.
- * To change this template file, choose Tools | Templates
- * and open the template in the editor.
- */
+
+$rental_history = new Car();
+
+//$query = $rental_history->get_rental_history();
+//$rental_history_results = $rental_history->print_results($query, $rental_history);
 
 $rental_history_view = "Rental History View";
 

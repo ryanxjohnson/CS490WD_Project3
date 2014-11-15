@@ -58,6 +58,16 @@ class Car {
         return "UPDATE car SET status = 1 WHERE ID = 2";
     }
 
+    // pre: what do we need
+    public function get_rental_history() {
+        return "";
+    }
+    
+    
+    
+    
+    
+    
     public function print_results($query, $object) {
         $result = $object->get_result($query);
         $all_results = "";
