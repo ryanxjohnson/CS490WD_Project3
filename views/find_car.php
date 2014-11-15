@@ -8,12 +8,14 @@ if (isset($_POST['search_field']) && trim($_POST['search_field']) != "") {
     
     $data = $_POST['search_field'];
     
-    $query = $search_available_cars->get_cars_by_search($data);  
+    $query = $search_available_cars->get_cars_by_search($data);
     
 } elseif (!isset($_POST['search_field']) || trim($_POST['search_field']) == "" || trim($_POST['search_field']) == null ) {
     
-    $query = $search_available_cars->get_available_cars();    
+    $query = $search_available_cars->get_available_cars();
+    
 }
 
 echo $search_terms = "Showing results for the search '" . $data . "'";
-echo $search_results = $search_available_cars->print_results($query, "build_searched_car"); // function "build_searched_car"
+echo $search_results = $search_available_cars->print_results($query, "build_searched_car");
+

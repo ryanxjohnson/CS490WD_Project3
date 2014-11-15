@@ -44,25 +44,25 @@ class Car {
     // pre: status = 2
     public function get_rented_cars() {
         return "SELECT carspecs.Make, carspecs.Model, carspecs.Year, carspecs.Size, 
-car.Color, car.ID, car.picture, car.picture_type, car.status, 
-rental.ID as rentID, rental.rentDate as rentDate, 
-rental.returnDate as returnDate, rental.status as rentStatus 
-        FROM car 
-        INNER JOIN carspecs on carspecs.ID = car.carspecsID 
-        INNER JOIN rental on rental.ID = car.ID
-        WHERE car.status = 2";
+                car.Color, car.ID, car.picture, car.picture_type, car.status, 
+                rental.ID as rentID, rental.rentDate as rentDate, 
+                rental.returnDate as returnDate, rental.status as rentStatus 
+                FROM car 
+                INNER JOIN carspecs on carspecs.ID = car.carspecsID 
+                INNER JOIN rental on rental.ID = car.ID
+                WHERE car.status = 2";
     }
 
     // pre: post: returns all cars that have been rented, then returned
     public function get_rental_history() {
         return "SELECT carspecs.Make, carspecs.Model, carspecs.Year, carspecs.Size, 
-car.Color, car.ID, car.picture, car.picture_type, car.status, 
-rental.ID as rentID, rental.rentDate as rentDate, 
-rental.returnDate as returnDate, rental.status as rentStatus 
-FROM carspecs
-INNER JOIN car on car.CarSpecsID = carspecs.ID 
-INNER JOIN rental on rental.carID = car.ID 
-INNER JOIN customer on rental.CustomerID = customer.ID WHERE car.status= 1";
+                car.Color, car.ID, car.picture, car.picture_type, car.status, 
+                rental.ID as rentID, rental.rentDate as rentDate, 
+                rental.returnDate as returnDate, rental.status as rentStatus 
+                FROM carspecs
+                INNER JOIN car on car.CarSpecsID = carspecs.ID 
+                INNER JOIN rental on rental.carID = car.ID 
+                INNER JOIN customer on rental.CustomerID = customer.ID WHERE car.status= 1";
     }
 
     // pre: rent button was clicked.
@@ -81,6 +81,7 @@ INNER JOIN customer on rental.CustomerID = customer.ID WHERE car.status= 1";
     // when car is returned rental_history updates
     public function update_rental_history() {
         return "";
+        //date($format, $timestamp);
     }
 
     /*   */
@@ -125,16 +126,15 @@ INNER JOIN customer on rental.CustomerID = customer.ID WHERE car.status= 1";
         if ($current_status == 1) {
             $event = "Returned";
             $show_button = "";
-            $x_date = $row['returnDate'];
+            $x_date = date_create($row['returnDate']);
         } elseif ($current_status == 2) {
             $event = "Rented";
-            $show_button = "<div class='return_car'>Return</div>";
-            $x_date = $row['rentDate'];
+            $show_button = "<td><div class='return_car'>Return</div></td>";
+            $x_date = date_create($row['rentDate']);
         }
 
-        $y_date=date_create($x_date);//    
-        $z_date=date_format($y_date,"l, F d, Y ");
-        
+        $z_date = date_format($x_date, "l, F d, Y ");
+
         $cars_found.="
                     <tr>
                 <td class='img'>
@@ -161,15 +161,10 @@ INNER JOIN customer on rental.CustomerID = customer.ID WHERE car.status= 1";
                         " . $event . " Date:  " . $z_date . "
                     </div>
                 </td>
-                <td>
-                   " . $show_button . "
-                </td>
+                   " . $show_button . "                
             </tr>
         ";
-
         return $cars_found;
     }
 
 }
-
-// onclick='alert(" . $row['Model'] . ")'
