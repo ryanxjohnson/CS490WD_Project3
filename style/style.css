@@ -283,13 +283,13 @@ td{
     position:relative;
     border-bottom:1px dotted lightgray; 
     height:140px;
-    width:150px;
+    width:175px;
 }
 
 
 td.car_details{
     position:relative;
-    width:250px;
+    width:300px;
 }
 
 td img{
@@ -319,7 +319,8 @@ td div.car_make{
 }
 
 td div.car_year{
-    float:left;
+    //float:left;
+    float:right;
     font-size:13px;
     color:gray;
     padding-left:5px;

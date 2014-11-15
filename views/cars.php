@@ -1,5 +1,3 @@
-<?php ?>
-
 <html>
     <head>
         <title>My Account</title>
@@ -31,17 +29,16 @@
                             <form method="post" >
                                 <input  id="search_field" name="search_field" class="search_field" type="text">
                                 <div class="search_button" type="submit" > 
-                                   
+
                                     <img src="images/glass.png">
                                 </div>
                             </form>
                         </div>
                         <img id="find_car_loading" class="loading_hidden" src="images/loading.gif">
                         <div id="search_results">
-                            
-<?php
-require_once("find_car.php");
-?>
+                            <?php
+                            require_once("find_car.php");
+                            ?>
                         </div>
                     </div>
                 </div>
@@ -50,21 +47,30 @@ require_once("find_car.php");
                     <div class="tab_detail_hidden"> 
                         <img id="rented_car_loading" class="loading_hidden" src="images/loading.gif">
                         <div id="rented_cars">
+                            <table>
+                                <th>Picture</th>
+                                <th>Details</th>
+                                <?php
+                                include("rented_cars.php");
+                                ?>
+                            </table>
                         </div>
-<?php
-include("rented_cars.php")
-?>
+
                     </div>
                 </div>
                 <div onclick="show_tab(this)" class="tab"> Rental History
                     <div class="tab_detail_hidden"> 
                         <img id="returned_car_loading" class="loading_hidden" src="images/loading.gif">
                         <div id="returned_cars">
-
+                            <table>
+                                <th>Picture</th>
+                                <th>Details</th>
+                                <?php
+                                include("rental_history.php");
+                                ?>
+                            </table>
                         </div>
-<?php
-include("rental_history.php");
-?>
+
                     </div>
                 </div>
             </div>
