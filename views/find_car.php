@@ -2,7 +2,7 @@
 require_once("/../classes/Car.php");
 
 $search_available_cars = new Car();
-$data="empty search yields all results";
+$data="empty search returns all results";
 
 if (isset($_POST['search_field']) && trim($_POST['search_field']) != "") {
     
@@ -17,6 +17,3 @@ if (isset($_POST['search_field']) && trim($_POST['search_field']) != "") {
 
 echo $search_terms = "Showing results for the search '" . $data . "'";
 echo $search_results = $search_available_cars->print_results($query, "build_searched_car"); // function "build_searched_car"
-
-
-?>

@@ -24,7 +24,7 @@ class Car {
             $this->errors[] = $this->db_connection->error;
     }
 
-    // pre: no params.
+    // pre: no params. post: returns all cars
     public function get_all_cars() {
         return "SELECT * FROM car INNER JOIN carspecs on carspecs.ID = car.CarSpecsID";
     }
@@ -53,6 +53,18 @@ rental.returnDate as returnDate, rental.status as rentStatus
         WHERE car.status = 2";
     }
 
+    // pre: post: returns all cars that have been rented, then returned
+    public function get_rental_history() {
+        return "SELECT carspecs.Make, carspecs.Model, carspecs.Year, carspecs.Size, 
+car.Color, car.ID, car.picture, car.picture_type, car.status, 
+rental.ID as rentID, rental.rentDate as rentDate, 
+rental.returnDate as returnDate, rental.status as rentStatus 
+FROM carspecs
+INNER JOIN car on car.CarSpecsID = carspecs.ID 
+INNER JOIN rental on rental.carID = car.ID 
+INNER JOIN customer on rental.CustomerID = customer.ID WHERE car.status= 1";
+    }
+
     // pre: rent button was clicked.
     // parameter: car.ID of the car that button was clicked
     public function update_car_as_rented($ID) {
@@ -65,23 +77,15 @@ rental.returnDate as returnDate, rental.status as rentStatus
         return "UPDATE car SET status = 1 WHERE ID = 2";
     }
 
-    // pre: what do we need...
-    public function get_rental_history() {
-        return "SELECT carspecs.Make, carspecs.Model, carspecs.Year, carspecs.Size, 
-car.Color, car.ID, car.picture, car.picture_type, car.status, 
-rental.ID as rentID, rental.rentDate as rentDate, 
-rental.returnDate as returnDate, rental.status as rentStatus 
-FROM carspecs
-INNER JOIN car on car.CarSpecsID = carspecs.ID 
-INNER JOIN rental on rental.carID = car.ID 
-INNER JOIN customer on rental.CustomerID = customer.ID WHERE car.status= 1";
-    }
-
+    // triggered when car status has changed. 
+    // when car is returned rental_history updates
     public function update_rental_history() {
-        
+        return "";
     }
 
-    //pre: query and function
+    /*   */
+
+    //pre: already queried. parameter: query and function
     public function print_results($query, $function) {
         $result = $this->get_result($query);
         $all_results = "";
@@ -92,14 +96,9 @@ INNER JOIN customer on rental.CustomerID = customer.ID WHERE car.status= 1";
         return $all_results;
     }
 
-    public function print_rental_history() {
-        
-    }
-
     // pre: need $query string
     public function get_result($query) {
         $result = mysqli_query($this->db_connection, $query);
-
         if (!$result) {
             die("Database access failed: " . mysqli_error());
         }
@@ -126,10 +125,16 @@ INNER JOIN customer on rental.CustomerID = customer.ID WHERE car.status= 1";
         if ($current_status == 1) {
             $event = "Returned";
             $show_button = "";
+            $x_date = $row['returnDate'];
         } elseif ($current_status == 2) {
             $event = "Rented";
             $show_button = "<div class='return_car'>Return</div>";
+            $x_date = $row['rentDate'];
         }
+
+        $y_date=date_create($x_date);//    
+        $z_date=date_format($y_date,"l, F d, Y ");
+        
         $cars_found.="
                     <tr>
                 <td class='img'>
@@ -153,7 +158,7 @@ INNER JOIN customer on rental.CustomerID = customer.ID WHERE car.status= 1";
                         Rental#: " . $row['rentID'] . "
                     </div>
                     <div class='car_date'>
-                        " . $event . " Date:  " . $row['Year'] . "
+                        " . $event . " Date:  " . $z_date . "
                     </div>
                 </td>
                 <td>
@@ -168,4 +173,3 @@ INNER JOIN customer on rental.CustomerID = customer.ID WHERE car.status= 1";
 }
 
 // onclick='alert(" . $row['Model'] . ")'
-?>
