@@ -55,12 +55,12 @@ class Car {
 
     // pre: rent button was clicked.
     // parameter: car.ID of the car that button was clicked
-    public function update_car_rented($ID) {
+    public function update_car_as_rented($ID) {
         return "UPDATE car SET status = 2 WHERE ID = 1";
     }
 
     // pre: return button was clicked
-    public function update_car_available() {
+    public function update_car_as_available() {
         return "UPDATE car SET status = 1 WHERE ID = 2";
     }
 
@@ -74,7 +74,7 @@ class Car {
         return "SELECT * FROM car INNER JOIN carspecs on carspecs.ID = car.carspecsID WHERE car.status = 2";
     }
 
-    // pre: parameter is  $row variable
+    // pre: parameter is  $row variable TODO: This isn't classy
     public function build_car($row) {
         $cars_found = "";
         $current_status = $row['status'];
@@ -92,6 +92,7 @@ class Car {
         return $cars_found;
     }
 
+    // pre: need $query string
     public function get_result($query) {
         $result = mysqli_query($this->db_connection, $query);
 
@@ -101,8 +102,8 @@ class Car {
         return $result;
     }
 
-    public function print_results($result, $object) {
-        //$result= $object->$query;
+    public function print_results($query, $object) {
+        $result=$object->get_result($query);
         $all_results = "";
         for ($j = 0; $j < mysqli_num_rows($result); ++$j) {
             $row = mysqli_fetch_array($result); //fetch the next row 

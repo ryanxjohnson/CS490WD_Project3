@@ -33,6 +33,7 @@ class Login {
             $this->errors[] = "Password field was empty.";
         } elseif (!empty($_POST['user_name']) && !empty($_POST['user_password'])) {
 
+            //TODO: Move db connection to constructor (or superclass)
             // create a database connection, using the constants from config/db_connection.php (which we loaded in index.php)
             $this->db_connection = new mysqli(DB_HOST, DB_USER, DB_PASS, DB_NAME);
 
@@ -56,6 +57,7 @@ class Login {
                     $result_row = $result_of_login_check->fetch_object();
 
                     $user_password_hash = md5($_POST['user_password']);
+                    
                     if ( $user_password_hash == $result_row->Password) {
                     $_SESSION['user_name'] = $result_row->ID;
                         $_SESSION['name'] = $result_row->Name;
