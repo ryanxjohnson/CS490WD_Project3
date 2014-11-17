@@ -1,11 +1,11 @@
 <?php
 
-
 class Car {
 
     private $db_connection = null;
     public $errors = array();
     public $messages = array();
+    public $term;
 
     public function __construct() {
         // create a database connection, using the constants from config/db_connection.php (which we loaded in index.php)
@@ -17,7 +17,10 @@ class Car {
 
         if (!$this->db_connection->connect_errno)
             $this->errors[] = $this->db_connection->error;
+        
     }
+
+    /*     * *** SELECT SQL STATEMENTS **** */
 
     // pre: no params. post: returns all cars
     public function get_all_cars() {
@@ -25,6 +28,7 @@ class Car {
     }
 
     // pre: need $data from _POST['search_field']
+    // take order_by variable?
     public function get_cars_by_search($data) {
         return "SELECT * FROM car INNER JOIN carspecs on carspecs.ID = car.CarSpecsID 
         WHERE car.status = 1 AND (Make LIKE '%$data%' OR Model LIKE '%$data%'
@@ -57,8 +61,10 @@ class Car {
                 FROM carspecs
                 INNER JOIN car on car.CarSpecsID = carspecs.ID 
                 INNER JOIN rental on rental.carID = car.ID 
-                INNER JOIN customer on rental.CustomerID = customer.ID WHERE car.status= 1";
+                INNER JOIN customer on rental.CustomerID = customer.ID WHERE car.status= 1 ORDER BY returnDate";
     }
+
+    /*     * *** UPDATE SQL STATEMENTS **** */
 
     // pre: rent button was clicked.
     // parameter: car.ID of the car that button was clicked
@@ -79,7 +85,7 @@ class Car {
         //date($format, $timestamp);
     }
 
-    /***** HELPER FUNCTIONS FOR VIEWS  *****/
+    /*     * *** HELPER FUNCTIONS FOR VIEWS  **** */
 
     //pre: already queried with instantiated object. 
     //parameters: query string and function
@@ -102,12 +108,39 @@ class Car {
         return $result;
     }
 
+    /*     * *** VIEW METHODS **** */
+
+    // pre: checks the value in the seach field variable. This is probably bad form to access POST like this.
+    // post: returns query as string
+    public function search_field_check() {
+        //$data=$_POST['search_field'];
+        
+        if (isset($_POST['search_field']) && trim($_POST['search_field']) != "") { 
+            echo "Showing results for the search '" . $_POST['search_field'] . "'";
+            return $this->get_cars_by_search($_POST['search_field']);
+        } elseif (!isset($_POST['search_field']) || trim($_POST['search_field']) == "" || trim($_POST['search_field']) == null) {
+            echo "empty search returns all results";
+            return $this->get_available_cars();
+        }
+    }
+
+    public function check_order_by() {
+        //$order_by=$_POST["sortby"];
+        
+        if (isset($_POST["sortby"]) && $_POST["sortby"] != "") {
+            return $order_by.="ORDER BY " . $_POST["sortby"];
+        } else {
+            return $order_by = "";
+        }
+    }
+
+    /*     * *** HTML BUILDERS DYNAMIC VIEWS  **** */
+
     // Builds html for Find Car
-    // pre: parameter is  $row variable TODO: This isn't classy
-    // rename to build_available_car($row)
+    // pre: parameter is  $row variable
     public function build_searched_car($row) {
         $cars_found = "";
-        return $cars_found.=" 
+        echo $cars_found.=" 
         <div class='search_item'>
             <img src='data:" . $row['picture_type'] . ";base64," . base64_encode($row['picture']) . "'>
                  <div class='car_make_background'>
@@ -136,14 +169,15 @@ class Car {
             $show_button = "";
             $x_date = date_create($row['returnDate']);
         } elseif ($current_status == 2) {
+            echo "Showing all rented vehicles. Click 'Return Car' to return a vehicle to inventory";
             $event = "Rented";
             $show_button = "<td><div class='return_car'>Return</div></td>";
             $x_date = date_create($row['rentDate']);
         }
 
-        $z_date = date_format($x_date, "l, F d, Y ");
+        $z_date = date_format($x_date, "l, F d, Y "); // format the date to display
 
-        return $cars_found.="
+        echo $cars_found.="
             <tr>
                 <td class='img'>
                 <img src='data:" . $row['picture_type'] . ";base64," . base64_encode($row['picture']) . "'>
