@@ -16,8 +16,8 @@ Click 'return' button
 
 Sort feature on find cars
 -->sort by Year or Make
--->This doesn't show until a search has been done
+-->This shouldn't show until a search has been done
 
 Login Page
--->Error needs to be shown within div per figure 3 in requirements(it's implemented, just needs to be moved
+DONE-->Error needs to be shown within div per figure 3 in requirements(implemented, just needs to be moved)
 

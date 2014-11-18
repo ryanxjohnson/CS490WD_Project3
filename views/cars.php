@@ -28,27 +28,25 @@
                         <div class="search_bar">
                             <form method="post" >
                                 <input  id="search_field" name="search_field" class="search_field" type="text">
-                                <div class="search_button" type="submit" > 
+                                <div class="search_button" value="submit" input_type="submit" > 
+                                    
 
                                     <img src="images/glass.png">
                                 </div>
 
                             </form>
-                            <!-- Good place for the sort? -->
-                            <form>
+                        </div>
+                        <img id="find_car_loading" class="loading_hidden" src="images/loading.gif">
+                        <div id="search_results">
+                            <!-- TODO: Move this form to build available function in car class -->
+                            <form method="post">
                                 <select id="sortby" name="sortby">
                                     <option value="">Sort By</option>
-                                    <option value="Color">Color</option>
                                     <option value="Make">Make</option>
-                                    <option value="Model">Model</option>
-                                    <option value="Size">Size</option>
                                     <option value="Year">Year</option>
                                 </select>
 <!--                                <input type="submit" value="Go!">-->
                             </form>
-                        </div>
-                        <img id="find_car_loading" class="loading_hidden" src="images/loading.gif">
-                        <div id="search_results">
                             <?php
                             require_once("find_car.php");
                             ?>

@@ -1,18 +1,4 @@
-<?php
-//feedback (from login object)
-if (isset($login)) {
-    if ($login->errors) {
-        foreach ($login->errors as $error) {
-            echo $error;
-        }
-    }
-    if ($login->messages) {
-        foreach ($login->messages as $message) {
-            echo $message;
-        }
-    }
-}
-?>
+
 <html>
     <head>
         <title>Car Rental System</title>
@@ -36,12 +22,30 @@ if (isset($login)) {
                 </div>
                 <div class="item">
                     <img id="loading" class="loading_hidden" src="images/loading.gif">
-<!--                    <div class="button" type="submit" name="login">Login</div>-->
+                    <!--                    <div class="button" type="submit" name="login">Login</div>-->
                     <input class="button" type="submit"  name="login" value="Login" />
                 </div>
-            </form>
-            <!-- for testing database and login -->
-            <a href="register.php">Register new account</a>
+            </form
+            <div id="login_feedback" class="feedback">
+                <?php
+                //feedback (from login object)
+                if (isset($login)) {
+                    if ($login->errors) {
+                        foreach ($login->errors as $error) {
+                            echo $error;
+                        }
+                    }
+                    if ($login->messages) {
+                        foreach ($login->messages as $message) {
+                            echo $message;
+                        }
+                    }
+                }
+                ?>
+                <!-- for testing database and login -->
+                <br><br><a href="register.php">Register new account</a>
+            </div>
+
         </div> 
 
     </body>
