@@ -1,0 +1,23 @@
+Requirements for Project 3:
+Click 'rent' button. System creates rental record
+-->Update status to 2
+-->rentDate is current system date
+-->Messagebox tells user car has been rented. User clicks ok
+-->list of rented cars is refreshed
+-->implement the magnifying glass click
+
+Click 'return' button
+-->Update status to 1
+-->returnDate is current system date
+-->**Messagebox tells user car has been returned?**
+-->list of rented cars is refreshed
+-->Entry in the rental_history table
+	--userid, details, etc
+
+Sort feature on find cars
+-->sort by Year or Make
+-->This doesn't show until a search has been done
+
+Login Page
+-->Error needs to be shown within div per figure 3 in requirements(it's implemented, just needs to be moved
+
