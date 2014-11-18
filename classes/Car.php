@@ -30,9 +30,22 @@ class Car {
     // pre: need $data from _POST['search_field']
     // take order_by variable?
     public function get_cars_by_search($data) {
+        $words = $this->tokenize($data, " ");
+        $LIKE = "";
+        $LIKE.=$this->LIKE("Make", $words);
+        $LIKE.=" OR " . $this->LIKE("Model", $words);
+        $LIKE.=" OR " . $this->LIKE("Color", $words);
+        $LIKE.=" OR " . $this->LIKE("Size", $words);
+        $LIKE.=" OR " . $this->LIKE("Year", $words);
+        
+        $order_by=  $this->check_order_by();
+        
         return "SELECT * FROM car INNER JOIN carspecs on carspecs.ID = car.CarSpecsID 
-        WHERE car.status = 1 AND (Make LIKE '%$data%' OR Model LIKE '%$data%'
-        OR Year LIKE '%$data%' OR Color LIKE '%$data%' or Size LIKE '%$data%')";
+        WHERE car.status = 1 AND ($LIKE) $order_by";
+
+//        return "SELECT * FROM car INNER JOIN carspecs on carspecs.ID = car.CarSpecsID 
+//        WHERE car.status = 1 AND (Make LIKE '%$data%' OR Model LIKE '%$data%'
+//        OR Year LIKE '%$data%' OR Color LIKE '%$data%' or Size LIKE '%$data%')";
     }
 
     // pre: no params. car status must be 1
@@ -87,6 +100,7 @@ class Car {
 
     /*     * *** HELPER FUNCTIONS FOR VIEWS  **** */
 
+    // Determine which html function to use by query and function
     //pre: already queried with instantiated object. 
     //parameters: query string and function
     public function print_results($query, $function) {
@@ -128,7 +142,7 @@ class Car {
         //$order_by=$_POST["sortby"];
         
         if (isset($_POST["sortby"]) && $_POST["sortby"] != "") {
-            return $order_by.="ORDER BY " . $_POST["sortby"];
+            return $order_by.=" ORDER BY " . $_POST["sortby"];
         } else {
             return $order_by = "";
         }
@@ -206,5 +220,32 @@ class Car {
                    " . $show_button . "                
             </tr>";
     }
+    
+    
+    /***** TOKENIZE SEARCH *****/
+    
+    function LIKE($column,$words){
+    $LIKE="";
+    $index=0;
+    foreach($words as $word){
+        if($index>0) //the first time we don't want to add LIKE
+        $LIKE.=" OR ";
+        
+        $LIKE.=" $column LIKE '%$word%' ";  
+        $index++;
+    }
+    return $LIKE;
+}
+
+function tokenize($data,$delimiter=","){
+
+    $array = array();
+    $token = strtok($data, $delimiter);
+    while($token!==false){
+        array_push($array,$token);
+         $token = strtok($delimiter);
+    }
+return $array;
+}
 
 }

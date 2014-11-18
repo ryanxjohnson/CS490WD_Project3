@@ -32,10 +32,11 @@
 
                                     <img src="images/glass.png">
                                 </div>
+
                             </form>
                             <!-- Good place for the sort? -->
-<!--                            <form>
-                                <select name="sortby">
+                            <form>
+                                <select id="sortby" name="sortby">
                                     <option value="">Sort By</option>
                                     <option value="Color">Color</option>
                                     <option value="Make">Make</option>
@@ -43,8 +44,8 @@
                                     <option value="Size">Size</option>
                                     <option value="Year">Year</option>
                                 </select>
-                                <input type="submit" value="Go!">
-                            </form>-->
+<!--                                <input type="submit" value="Go!">-->
+                            </form>
                         </div>
                         <img id="find_car_loading" class="loading_hidden" src="images/loading.gif">
                         <div id="search_results">
