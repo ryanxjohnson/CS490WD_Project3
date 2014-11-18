@@ -4,7 +4,7 @@ Click 'rent' button. System creates rental record
 -->rentDate is current system date
 -->Messagebox tells user car has been rented. User clicks ok
 -->list of rented cars is refreshed
--->implement the magnifying glass click
+DONE-->implement the magnifying glass click
 
 Click 'return' button
 -->Update status to 1

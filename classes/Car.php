@@ -27,7 +27,6 @@ class Car {
     }
 
     // pre: need $data from _POST['search_field']
-    // take order_by variable?
     public function get_cars_by_search($data) {
         $words = $this->tokenize($data, " ");
         $LIKE = "";
@@ -37,7 +36,8 @@ class Car {
         $LIKE.=" OR " . $this->LIKE("Size", $words);
         $LIKE.=" OR " . $this->LIKE("Year", $words);
         
-        $order_by=  $this->check_order_by();
+        $order_by=" ORDER BY Year ";
+        $order_by=$this->check_order_by();
         
         return "SELECT * FROM car INNER JOIN carspecs on carspecs.ID = car.CarSpecsID 
         WHERE car.status = 1 AND ($LIKE) $order_by";
@@ -55,7 +55,7 @@ class Car {
     // pre: status = 2
     public function get_rented_cars() {
         return "SELECT carspecs.Make, carspecs.Model, carspecs.Year, carspecs.Size, 
-                car.Color, car.ID, car.picture, car.picture_type, car.status, 
+                car.Color, car.ID as carID, car.picture, car.picture_type, car.status, 
                 rental.ID as rentID, rental.rentDate as rentDate, 
                 rental.returnDate as returnDate, rental.status as rentStatus 
                 FROM car 
@@ -67,13 +67,13 @@ class Car {
     // pre: post: returns all cars that have been rented, then returned
     public function get_rental_history() {
         return "SELECT carspecs.Make, carspecs.Model, carspecs.Year, carspecs.Size, 
-                car.Color, car.ID, car.picture, car.picture_type, car.status, 
+                car.Color, car.ID as carID, car.picture, car.picture_type, car.status, 
                 rental.ID as rentID, rental.rentDate as rentDate, 
                 rental.returnDate as returnDate, rental.status as rentStatus 
                 FROM carspecs
                 INNER JOIN car on car.CarSpecsID = carspecs.ID 
                 INNER JOIN rental on rental.carID = car.ID 
-                INNER JOIN customer on rental.CustomerID = customer.ID WHERE car.status= 1 ORDER BY returnDate";
+                INNER JOIN customer on rental.CustomerID = customer.ID WHERE car.status= 1 ORDER BY rentID";
     }
 
     /*     * *** UPDATE SQL STATEMENTS **** */
@@ -81,13 +81,13 @@ class Car {
     // pre: rent button was clicked.
     // parameter: car.ID of the car that button was clicked
     public function update_car_as_rented($ID) {
-        return "UPDATE car SET status = 2 WHERE ID = 1";
+        return "UPDATE car SET status = 2 WHERE ID = $ID";
     }
 
     // pre: return button was clicked
     // parameter: car.ID of the car that button was clicked
-    public function update_car_as_available() {
-        return "UPDATE car SET status = 1 WHERE ID = 2";
+    public function update_car_as_available($ID) {
+        return "UPDATE car SET status = 1 WHERE ID = $ID";
     }
 
     // triggered when car status has changed. 
@@ -137,8 +137,20 @@ class Car {
         }
     }
 
+    public function selector(){
+        return 
+        "<form method='post'>
+           <select id='sortby' name='sortby'>
+           <option value=''>Sort By</option>
+           <option value='Make'>Make</option>
+           <option value='Year'>Year</option>
+           </select>
+           <input type='submit' value='Sort'>
+        </form>";
+    }
+
     public function check_order_by() {
-        //$order_by=$_POST["sortby"];
+        //$order_by=$_POST["sortby"];       
         
         if (isset($_POST["sortby"]) && $_POST["sortby"] != "") {
             return $order_by.=" ORDER BY " . $_POST["sortby"];
@@ -168,7 +180,8 @@ class Car {
                 <div class='" . $row['Color'] . "'> 
             </div> 
         </div>
-        <div class='car_rent'> Rent Car
+        <div class='car_rent' onclick='show_message()';'" 
+                . $this->update_car_as_rented($row['ID']) . "';> Rent Car
         </div>
     </div>";
     }
@@ -184,7 +197,8 @@ class Car {
         } elseif ($current_status == 2) {
             echo "Showing all rented vehicles. Click 'Return Car' to return a vehicle to inventory";
             $event = "Rented";
-            $show_button = "<td><div class='return_car'>Return</div></td>";
+            $show_button = "<td><div class='return_car' onclick='" 
+                    . $this->update_car_as_available($row['carID']) ."'>Return</div></td>";
             $x_date = date_create($row['rentDate']);
         }
 

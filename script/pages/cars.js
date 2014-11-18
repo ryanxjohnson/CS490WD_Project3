@@ -21,5 +21,6 @@ function close_message() {
 function show_message() {
     $("background").style.display = "block";
     $("message_box").style.display = "block";
+    $("message").innerHTML = " Showing a message ";
 }
 

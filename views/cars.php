@@ -26,26 +26,24 @@
                 <div onclick="show_tab(this)" class="tab_pressed"> Find Car
                     <div class="tab_detail"> 
                         <div class="search_bar">
-                            <form method="post" >
+                            <form method="post">
                                 <input  id="search_field" name="search_field" class="search_field" type="text">
-                                <div class="search_button" value="submit" input_type="submit" > 
-                                    
-
+                                <button class="search_button" value="submit" type="submit" > 
                                     <img src="images/glass.png">
-                                </div>
+                                </button>
 
                             </form>
                         </div>
                         <img id="find_car_loading" class="loading_hidden" src="images/loading.gif">
                         <div id="search_results">
-                            <!-- TODO: Move this form to build available function in car class -->
+                            <!-- TODO: Moved this form to car class -->
                             <form method="post">
                                 <select id="sortby" name="sortby">
                                     <option value="">Sort By</option>
                                     <option value="Make">Make</option>
                                     <option value="Year">Year</option>
                                 </select>
-<!--                                <input type="submit" value="Go!">-->
+                                <input type="submit" value="Sort">
                             </form>
                             <?php
                             require_once("find_car.php");
