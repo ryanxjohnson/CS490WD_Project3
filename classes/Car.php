@@ -5,7 +5,6 @@ class Car {
     private $db_connection = null;
     public $errors = array();
     public $messages = array();
-    public $term;
 
     public function __construct() {
         // create a database connection, using the constants from config/db_connection.php (which we loaded in index.php)
