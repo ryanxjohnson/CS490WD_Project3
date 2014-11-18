@@ -197,7 +197,7 @@ class Car {
         } elseif ($current_status == 2) {
             echo "Showing all rented vehicles. Click 'Return Car' to return a vehicle to inventory";
             $event = "Rented";
-            $show_button = "<td><div class='return_car' onclick='" 
+            $show_button = "<td><div class='return_car' onclick='show_message()';" 
                     . $this->update_car_as_available($row['carID']) ."'>Return</div></td>";
             $x_date = date_create($row['rentDate']);
         }
