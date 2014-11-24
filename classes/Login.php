@@ -65,9 +65,15 @@ class Login {
         }
     }
 
+    
     public function Logout() {
         // delete the session of the user
         $_SESSION = array();
+                if (ini_get("session.use_cookies")) {
+            $params = session_get_cookie_params();
+            setcookie(session_name(), '', time() - 42000, $params["path"], $params["domain"], $params["secure"], $params["httponly"]
+            );
+        }
         session_destroy();
         $this->messages[] = "You have been logged out.";
     }
@@ -78,6 +84,11 @@ class Login {
         }
         return false;
     }
+//    function is_session_active() {
+//        return isset($_SESSION) && count($_SESSION) > 0;
+//    }
+    
+    
 
     // pre: need userID
     public function get_user_by_username($user_name) {

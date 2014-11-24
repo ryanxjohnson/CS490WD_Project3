@@ -1,5 +1,6 @@
 <?php
 
+
 class Car {
 
     private $db_connection = null;
