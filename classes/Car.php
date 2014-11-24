@@ -81,13 +81,13 @@ class Car {
     // pre: rent button was clicked.
     // parameter: car.ID of the car that button was clicked
     public function update_car_as_rented($ID) {
-        return "UPDATE car SET status = 2 WHERE ID = $ID";
+        return "UPDATE car SET car.status = 2 WHERE car.ID = $ID";
     }
 
     // pre: return button was clicked
     // parameter: car.ID of the car that button was clicked
     public function update_car_as_available($ID) {
-        return "UPDATE car SET status = 1 WHERE ID = $ID";
+        return "UPDATE car SET car.status = 1 WHERE car.ID = $ID";
     }
 
     // triggered when car status has changed. 
@@ -185,8 +185,7 @@ class Car {
         </div>
     </div>";
     }
-
-    // builds html for Rented Cars and Rental History
+    
     public function build_tainted_car($row) {
         $cars_found = "";
         $current_status = $row['status'];

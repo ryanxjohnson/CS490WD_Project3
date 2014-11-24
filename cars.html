@@ -12,39 +12,29 @@ and open the template in the editor.
         <link rel="stylesheet" type="text/css" href="style/style.css">
         <script type="text/javascript"  src='script/general/general.js'></script>
         <script type="text/javascript"  src='script/pages/cars.js'></script>
-        <?php require_once("/views/find_car.php"); ?>
     </head>
     <body onload="init();">
         <div class="container">
-
             <div class="account">
                 <div class="welcome">
-
                     <a onclick="logout();">Logout</a>
                     <a href="" id="username"></a> 
                     <img id="user_loading" class="user_loading_hidden" src="images/loading.gif">
                 </div>
-
                 <img src="images/car.PNG">
                 <p>Rent a Car</p>
-
             </div>
             <div  class="tabs" id="tabs">
                 <div onclick="show_tab(this)" class="tab_pressed"> Find Car
                     <div class="tab_detail"> 
                         <div class="search_bar">
                             <input  id="search_field" class="search_field" type="text">
-                            <div onclick="find_car(0, 'Year');" 
-                                 
+                            <div onclick="find_car(0, 'Year');"                                 
                                  class="search_button"><img src="images/glass.png"></div>
                         </div>
                         <img id="find_car_loading" class="loading_hidden" src="images/loading.gif">
                         <div id="search_results">
-                            <?php
-                            $search_results;
-                            ?>
                         </div>
-
                     </div>
                 </div>
                 <div onclick="show_tab(this)" class="tab"> Rented Cars
@@ -55,45 +45,10 @@ and open the template in the editor.
                     </div>
                 </div>
                 <div onclick="show_tab(this)" class="tab"> Rental History
-
                     <div class="tab_detail_hidden"> 
                         <img id="returned_car_loading" class="loading_hidden" src="images/loading.gif">
                         <div id="returned_cars">
-
-                            <table>
-                                <th>Picture</th>
-                                <th>Details</th>
-                                <tr>
-                                    <td class='img'><img src="images/loading.gif"></td>
-                                    <td class='car_details'>
-                                        <div>
-                                            <div class='car_title'>
-                                                <div class='car_make'>
-                                                    Volkswagen | Passat 
-                                                    <div class='car_year'>
-                                                        2002
-                                                    </div>
-                                                </div>
-                                            </div>
-                                        </div>
-                                        <div class='car_size'>
-                                            Medium
-                                        </div>
-                                        <div class='rental_ID'>
-                                            Rental#: 22
-                                        </div>
-                                        <div class='car_date'>
-                                            Rent Date: Sun, November 2, 2014
-                                        </div>
-                                    </td>
-                                    <td>
-                                        <div class='return_car'>Return</div>
-                                    </td>
-                                </tr>
-                            </table> 
-
                         </div>
-
                     </div>
                 </div>
             </div>
