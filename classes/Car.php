@@ -40,7 +40,7 @@ class Car {
         $order_by=" ORDER BY Year ";
         $order_by=$this->check_order_by();
 
-//        return"select car.ID as carID, carspecs.ID as specsID, carspecs.Make, carspecs.Model, carspecs.Year, carspecs.Size,
+//        return"select car.ID as carID, car.CarSpecsID as carspecsID, carspecs.Make, carspecs.Model, carspecs.Year, carspecs.Size,
 //                car.picture, car.picture_type, car.status, car.Color
 //                from car 
 //                inner join carspecs on carspecs.ID = car.CarSpecsID WHERE car.status = 1 AND ($LIKE) $order_by";
