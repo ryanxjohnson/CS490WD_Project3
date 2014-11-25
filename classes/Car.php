@@ -60,20 +60,20 @@ class Car {
 
     // pre: status = 2
     public function get_rented_cars() {
-        return "SELECT carspecs.ID as carspecsID, carspecs.Make, carspecs.Model, carspecs.Year, carspecs.Size, 
+        return "SELECT car.CarSpecsID as carspecsID, carspecs.Make, carspecs.Model, carspecs.Year, carspecs.Size, 
                 car.Color, car.ID as carID, car.picture, car.picture_type, car.status as carStatus, 
                 rental.ID as rentID, rental.rentDate as rentDate, 
                 rental.returnDate as returnDate, rental.status as rentStatus 
                 FROM car 
                 INNER JOIN carspecs on carspecs.ID = car.carspecsID 
                 INNER JOIN rental on rental.ID = car.ID
-                WHERE car.status= 2 AND rental.status = 2";
+                WHERE car.status= 2";
     }
 
     // pre: post: returns all cars that have been rented, then returned
     public function get_rental_history() {
         return "SELECT carspecs.Make, carspecs.Model, carspecs.Year, carspecs.Size, 
-                car.Color, car.ID as carID, car.picture, car.picture_type, car.status, 
+                car.Color, car.ID as carID, car.picture, car.picture_type, car.status as carStatus, car.CarSpecsID as carspecsID, 
                 rental.ID as rentID, rental.rentDate as rentDate, 
                 rental.returnDate as returnDate, rental.status as rentStatus 
                 FROM carspecs
@@ -182,8 +182,8 @@ class Car {
     // pre: parameter is  $row variable
     public function build_searched_car($row) {
         $cars_found = "";
-        $car_id=0;//$row['carID'];
-        $car_spec_id=0;//$row['specsID'];
+        $car_id=$row['ID'];
+        $car_spec_id=$row['CarSpecsID'];
         echo $cars_found.=" 
         <div class='search_item'>
             <img src='data:" . $row['picture_type'] . ";base64," . base64_encode($row['picture']) . "'>
@@ -205,7 +205,9 @@ class Car {
     
     public function build_tainted_car($row) {
         $cars_found = "";
-        //$current_status = $row['status'];
+        $car_id=$row['carID'];
+        $car_spec_id=$row['carspecsID'];
+        $current_status = $row['carStatus'];
         if ($current_status == 1) {
             $event = "Returned";
             $show_button = "";
@@ -213,7 +215,7 @@ class Car {
         } elseif ($current_status == 2) {
             $event = "Rented";
             $show_button = "<td><div class='return_car' onclick='show_message()';" 
-                    . $this->update_car_as_available($row['carID'], $row['carspecsID']) ."'>Return</div></td>";
+                    . $this->update_car_as_available($car_id, $car_spec_id) ."'>Return</div></td>";
             $x_date = date_create($row['rentDate']);
         }
 
