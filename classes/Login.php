@@ -51,6 +51,7 @@ class Login {
 
                     // load SESSION variable so we know who does stuff
                     if ($user_password_hash == $row->Password) {
+                        ini_set('session.gc_maxlifetime', 60 * 5); //the life time of the session is 5 minutes
                         $_SESSION['user_name'] = $row->ID;
                         $_SESSION['name'] = $row->Name;
                         $_SESSION['user_login_status'] = 1;
