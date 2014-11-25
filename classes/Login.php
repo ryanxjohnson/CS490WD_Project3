@@ -31,11 +31,11 @@ class Login {
         if ($this->validate_form() == true) {
             if (!$this->db_connection->connect_errno) {
 
-                // not implemented
+                // dump the POST stuff
                 $user_name = $this->sanitizeMYSQL($_POST['user_name']);
                 $user_password_hash = md5($this->sanitizeMYSQL($_POST['user_password']));
 
-                // dump the POST stuff
+
                 //$user_name = $this->db_connection->real_escape_string($_POST['user_name']);
                 //$user_password_hash = md5($_POST['user_password']);
 

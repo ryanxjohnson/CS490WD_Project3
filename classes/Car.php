@@ -39,30 +39,35 @@ class Car {
         
         $order_by=" ORDER BY Year ";
         $order_by=$this->check_order_by();
-        
+
+//        return"select car.ID as carID, carspecs.ID as specsID, carspecs.Make, carspecs.Model, carspecs.Year, carspecs.Size,
+//                car.picture, car.picture_type, car.status, car.Color
+//                from car 
+//                inner join carspecs on carspecs.ID = car.CarSpecsID WHERE car.status = 1 AND ($LIKE) $order_by";
+
         return "SELECT * FROM car INNER JOIN carspecs on carspecs.ID = car.CarSpecsID 
         WHERE car.status = 1 AND ($LIKE) $order_by";
 
-//        return "SELECT * FROM car INNER JOIN carspecs on carspecs.ID = car.CarSpecsID 
-//        WHERE car.status = 1 AND (Make LIKE '%$data%' OR Model LIKE '%$data%'
-//        OR Year LIKE '%$data%' OR Color LIKE '%$data%' or Size LIKE '%$data%')";
+
     }
 
     // pre: no params. car status must be 1
     public function get_available_cars() {
-        return "SELECT * FROM car INNER JOIN carspecs on carspecs.ID = car.carspecsID WHERE car.status = 1";
+        return "select *
+                from car 
+                inner join carspecs on carspecs.ID = car.CarSpecsID WHERE car.status = 1";
     }
 
     // pre: status = 2
     public function get_rented_cars() {
-        return "SELECT carspecs.Make, carspecs.Model, carspecs.Year, carspecs.Size, 
-                car.Color, car.ID as carID, car.picture, car.picture_type, car.status, 
+        return "SELECT carspecs.ID as carspecsID, carspecs.Make, carspecs.Model, carspecs.Year, carspecs.Size, 
+                car.Color, car.ID as carID, car.picture, car.picture_type, car.status as carStatus, 
                 rental.ID as rentID, rental.rentDate as rentDate, 
                 rental.returnDate as returnDate, rental.status as rentStatus 
                 FROM car 
                 INNER JOIN carspecs on carspecs.ID = car.carspecsID 
                 INNER JOIN rental on rental.ID = car.ID
-                WHERE car.status = 2";
+                WHERE car.status= 2 AND rental.status = 2";
     }
 
     // pre: post: returns all cars that have been rented, then returned
@@ -74,23 +79,33 @@ class Car {
                 FROM carspecs
                 INNER JOIN car on car.CarSpecsID = carspecs.ID 
                 INNER JOIN rental on rental.carID = car.ID 
-                INNER JOIN customer on rental.CustomerID = customer.ID WHERE car.status= 1 ORDER BY rentID";
+                INNER JOIN customer on rental.CustomerID = customer.ID 
+                WHERE car.status= 1 ORDER BY rentID";
     }
 
     /*     * *** UPDATE SQL STATEMENTS **** */
 
     // pre: rent button was clicked.
-    // parameter: car.ID of the car that button was clicked
-    public function update_car_as_rented($ID) {
-        return "UPDATE car SET car.status = 2 WHERE car.ID = $ID";
+    // parameter: car.ID AND carspecs.ID of the car that button was clicked
+    public function update_car_as_rented($carID, $carspecsID) {
+        $query= "UPDATE car 
+                INNER JOIN carspecs ON carspecs.ID = car.CarSpecsID
+                SET car.status='2'
+                WHERE car.ID='$carID' AND carspecs.ID='$carspecsID';";
+        $this->get_result($query);
     }
 
     // pre: return button was clicked
     // parameter: car.ID of the car that button was clicked
-    public function update_car_as_available($ID) {
-        return "UPDATE car SET car.status = 1 WHERE car.ID = $ID";
+    public function update_car_as_available($carID, $carspecsID) {
+        $query= "UPDATE car 
+                INNER JOIN carspecs ON carspecs.ID = car.CarSpecsID
+                SET car.status='1'
+                WHERE car.ID='$carID' AND carspecs.ID='$carspecsID';";
+        $this->get_result($query);
     }
 
+    
     // triggered when car status has changed. 
     // when car is returned rental_history updates
     public function update_rental_history() {
@@ -98,9 +113,12 @@ class Car {
         //date($format, $timestamp);
     }
 
+    
+    
+    
     /*     * *** HELPER FUNCTIONS FOR VIEWS  **** */
 
-    // Determine which html function to use by query and function
+    
     //pre: already queried with instantiated object. 
     //parameters: query string and function
     public function print_results($query, $function) {
@@ -126,9 +144,7 @@ class Car {
 
     // pre: checks the value in the seach field variable. This is probably bad form to access POST like this.
     // post: returns query as string
-    public function search_field_check() {
-        //$data=$_POST['search_field'];
-        
+    public function search_field_check() {        
         if (isset($_POST['search_field']) && trim($_POST['search_field']) != "") { 
             echo "Showing results for the search '" . $_POST['search_field'] . "'";
             return $this->get_cars_by_search($_POST['search_field']);
@@ -166,6 +182,8 @@ class Car {
     // pre: parameter is  $row variable
     public function build_searched_car($row) {
         $cars_found = "";
+        $car_id=0;//$row['carID'];
+        $car_spec_id=0;//$row['specsID'];
         echo $cars_found.=" 
         <div class='search_item'>
             <img src='data:" . $row['picture_type'] . ";base64," . base64_encode($row['picture']) . "'>
@@ -181,24 +199,21 @@ class Car {
                 <div class='" . $row['Color'] . "'> 
             </div> 
         </div>
-        <div class='car_rent' onclick='show_message()';'" 
-                . $this->update_car_as_rented($row['ID']) . "';> Rent Car
-        </div>
+        <div id='rent' class='car_rent' onclick='" . $this->update_car_as_rented($car_id,$car_spec_id) . "'> Rent Car</div>
     </div>";
     }
     
     public function build_tainted_car($row) {
         $cars_found = "";
-        $current_status = $row['status'];
+        //$current_status = $row['status'];
         if ($current_status == 1) {
             $event = "Returned";
             $show_button = "";
             $x_date = date_create($row['returnDate']);
         } elseif ($current_status == 2) {
-            echo "Showing all rented vehicles. Click 'Return Car' to return a vehicle to inventory";
             $event = "Rented";
             $show_button = "<td><div class='return_car' onclick='show_message()';" 
-                    . $this->update_car_as_available($row['carID']) ."'>Return</div></td>";
+                    . $this->update_car_as_available($row['carID'], $row['carspecsID']) ."'>Return</div></td>";
             $x_date = date_create($row['rentDate']);
         }
 

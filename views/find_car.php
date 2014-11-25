@@ -13,3 +13,4 @@ if (isset($_POST['search_field'])) {
     $search_results = $search_available_cars->print_results($query, "build_searched_car");
 }
 
+?>

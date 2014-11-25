@@ -124,3 +124,23 @@ function show_info(type,id) {
     ajax.open("POST", "cars.php"); 
     ajax.send(data); //send the data
 }
+
+function showUser(str) {
+  if (str=="") {
+    document.getElementById("search_results").innerHTML="";
+    return;
+  } 
+  if (window.XMLHttpRequest) {
+    // code for IE7+, Firefox, Chrome, Opera, Safari
+    xmlhttp=new XMLHttpRequest();
+  } else { // code for IE6, IE5
+    xmlhttp=new ActiveXObject("Microsoft.XMLHTTP");
+  }
+  xmlhttp.onreadystatechange=function() {
+    if (xmlhttp.readyState==4 && xmlhttp.status==200) {
+      document.getElementById("search_results").innerHTML=xmlhttp.responseText;
+    }
+  }
+  xmlhttp.open("GET","cars.php?q="+str,true);
+  xmlhttp.send();
+}

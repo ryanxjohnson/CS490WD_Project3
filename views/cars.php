@@ -38,7 +38,7 @@
                         <div id="search_results">
                             <!-- TODO: Moved this form to car class -->
                             <form method="post">
-                                <select id="sortby" name="sortby">
+                                <select id="sortby" name="sortby" onchange="showUser(this.value)">
                                     <option value="">Sort By</option>
                                     <option value="Make">Make</option>
                                     <option value="Year">Year</option>
