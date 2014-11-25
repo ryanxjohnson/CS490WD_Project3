@@ -31,9 +31,13 @@ class Login {
         if ($this->validate_form() == true) {
             if (!$this->db_connection->connect_errno) {
 
+                // not implemented
+                $user_name = $this->sanitizeMYSQL($_POST['user_name']);
+                $user_password_hash = md5($this->sanitizeMYSQL($_POST['user_password']));
+
                 // dump the POST stuff
-                $user_name = $this->db_connection->real_escape_string($_POST['user_name']);
-                $user_password_hash = md5($_POST['user_password']);
+                //$user_name = $this->db_connection->real_escape_string($_POST['user_name']);
+                //$user_password_hash = md5($_POST['user_password']);
 
                 $query = $this->get_user_by_username($user_name);
                 $result_for_login_check = //$this->get_result($query);
@@ -121,4 +125,19 @@ class Login {
     }
   
 
-}
+        public function sanitizeString($var) {
+        if (get_magic_quotes_gpc()) //get rid of unwanted slashes using magic_quotes_gpc
+            $var = stripslashes($var);
+
+        $var = htmlentities($var, ENT_COMPAT, 'UTF-8'); //get rid of html entities e.g. &lt;b&gt;hi&lt;/b&gt; = <b>hi</b>
+        $var = strip_tags($var); //get rid of html tags e.g. <b>
+        return $var;
+    }
+
+    public function sanitizeMYSQL($var) {
+        $var = mysqli_real_escape_string($this->db_connection, $var); //Escapes special characters in a string for use in an SQL statement
+        $var = $this->sanitizeString($var);
+        return $var;
+    }
+
+} // end of class

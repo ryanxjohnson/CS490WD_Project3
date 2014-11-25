@@ -22,8 +22,8 @@
                 </div>
                 <div class="item">
                     <img id="loading" class="loading_hidden" src="images/loading.gif">
-                    <div class="button" type="submit" onclick="login();" name="login">Login</div>
-<!--                    <input class="button" type="submit" onclick='login()'  name="login" value="Login" />-->
+<!--                    <div class="button" type="submit" onclick="login();" name="login">Login</div>-->
+                    <input class="button" type="submit"  name="login" value="Login" />
                 </div>
             </form
             <div id="login_feedback" class="feedback">
