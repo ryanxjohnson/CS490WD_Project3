@@ -14,7 +14,8 @@ function $(id) {
 
 function init() {
     make_search_field("search_field", "Type car make, model, year, color, etc.");
-    $("username").innerHTML = "$_SESSION['real_name']";
+    //$("username").innerHTML = "$_SESSION['real_name']";
+    show_info("name","username");
     show_info("search_results", "search_results");
     show_info("search_field", $("search_field").value);
     show_info("rented_cars", "rented_cars");
