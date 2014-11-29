@@ -1,6 +1,16 @@
 <?php
 
+/*
+ * To change this license header, choose License Headers in Project Properties.
+ * To change this template file, choose Tools | Templates
+ * and open the template in the editor.
+ */
 
+/**
+ * Description of Car
+ *
+ * @author Ryan
+ */
 class Car {
 
     private $db_connection = null;
@@ -8,6 +18,8 @@ class Car {
     public $messages = array();
 
     public function __construct() {
+
+
         // create a database connection, using the constants from config/db_connection.php (which we loaded in index.php)
         $this->db_connection = new mysqli(DB_HOST, DB_USER, DB_PASS, DB_NAME);
 
@@ -15,12 +27,12 @@ class Car {
             $this->errors[] = $this->db_connection->error;
         }
 
-        if (!$this->db_connection->connect_errno)
+        if (!$this->db_connection->connect_errno) {
             $this->errors[] = $this->db_connection->error;
-        
+        }
     }
 
-    /*     * *** SELECT SQL STATEMENTS **** */
+    /* SQL STATEMENTS */
 
     // pre: no params. post: returns all cars
     public function get_all_cars() {
@@ -36,26 +48,24 @@ class Car {
         $LIKE.=" OR " . $this->LIKE("Color", $words);
         $LIKE.=" OR " . $this->LIKE("Size", $words);
         $LIKE.=" OR " . $this->LIKE("Year", $words);
-        
-        $order_by=" ORDER BY Year ";
-        $order_by=$this->check_order_by();
 
-//        return"select car.ID as carID, car.CarSpecsID as carspecsID, carspecs.Make, carspecs.Model, carspecs.Year, carspecs.Size,
-//                car.picture, car.picture_type, car.status, car.Color
-//                from car 
-//                inner join carspecs on carspecs.ID = car.CarSpecsID WHERE car.status = 1 AND ($LIKE) $order_by";
+        $order_by = " ORDER BY Year ";
+        //$order_by = $this->check_order_by();
 
         return "SELECT * FROM car INNER JOIN carspecs on carspecs.ID = car.CarSpecsID 
         WHERE car.status = 1 AND ($LIKE) $order_by";
-
-
     }
 
     // pre: no params. car status must be 1
     public function get_available_cars() {
-        return "select *
-                from car 
-                inner join carspecs on carspecs.ID = car.CarSpecsID WHERE car.status = 1";
+                return "SELECT car.CarSpecsID as carspecsID, carspecs.Make, carspecs.Model, carspecs.Year, carspecs.Size, 
+                car.Color, car.ID as carID, car.picture, car.picture_type, car.status as carStatus, 
+                rental.ID as rentID, rental.rentDate as rentDate, 
+                rental.returnDate as returnDate, rental.status as rentStatus 
+                FROM car 
+                INNER JOIN carspecs on carspecs.ID = car.carspecsID 
+                INNER JOIN rental on rental.ID = car.ID
+                WHERE car.status= 1";
     }
 
     // pre: status = 2
@@ -86,9 +96,9 @@ class Car {
     /*     * *** UPDATE SQL STATEMENTS **** */
 
     // pre: rent button was clicked.
-    // parameter: car.ID AND carspecs.ID of the car that button was clicked
+    // parameter: car.ID of the car that button was clicked
     public function update_car_as_rented($carID, $carspecsID) {
-        $query= "UPDATE car 
+        $query = "UPDATE car 
                 INNER JOIN carspecs ON carspecs.ID = car.CarSpecsID
                 SET car.status='2'
                 WHERE car.ID='$carID' AND carspecs.ID='$carspecsID';";
@@ -98,14 +108,13 @@ class Car {
     // pre: return button was clicked
     // parameter: car.ID of the car that button was clicked
     public function update_car_as_available($carID, $carspecsID) {
-        $query= "UPDATE car 
+        $query = "UPDATE car 
                 INNER JOIN carspecs ON carspecs.ID = car.CarSpecsID
                 SET car.status='1'
                 WHERE car.ID='$carID' AND carspecs.ID='$carspecsID';";
         $this->get_result($query);
     }
 
-    
     // triggered when car status has changed. 
     // when car is returned rental_history updates
     public function update_rental_history() {
@@ -113,12 +122,9 @@ class Car {
         //date($format, $timestamp);
     }
 
-    
-    
-    
-    /*     * *** HELPER FUNCTIONS FOR VIEWS  **** */
+    /* QUERY HELPERS */
 
-    
+    // Determine which html function to use by query and function
     //pre: already queried with instantiated object. 
     //parameters: query string and function
     public function print_results($query, $function) {
@@ -140,12 +146,14 @@ class Car {
         return $result;
     }
 
-    /*     * *** VIEW METHODS **** */
+    /* CHECK HELPERS */
 
     // pre: checks the value in the seach field variable. This is probably bad form to access POST like this.
     // post: returns query as string
-    public function search_field_check() {        
-        if (isset($_POST['search_field']) && trim($_POST['search_field']) != "") { 
+    public function search_field_check() {
+        //   $data=$_POST['search_field'];
+
+        if (isset($_POST['search_field']) && trim($_POST['search_field']) != "") {
             echo "Showing results for the search '" . $_POST['search_field'] . "'";
             return $this->get_cars_by_search($_POST['search_field']);
         } elseif (!isset($_POST['search_field']) || trim($_POST['search_field']) == "" || trim($_POST['search_field']) == null) {
@@ -154,36 +162,16 @@ class Car {
         }
     }
 
-    public function selector(){
-        return 
-        "<form method='post'>
-           <select id='sortby' name='sortby'>
-           <option value=''>Sort By</option>
-           <option value='Make'>Make</option>
-           <option value='Year'>Year</option>
-           </select>
-           <input type='submit' value='Sort'>
-        </form>";
-    }
+    /* HTML BUILDERS */
 
-    public function check_order_by() {
-        //$order_by=$_POST["sortby"];       
-        
-        if (isset($_POST["sortby"]) && $_POST["sortby"] != "") {
-            return $order_by.=" ORDER BY " . $_POST["sortby"];
-        } else {
-            return $order_by = "";
-        }
-    }
-
-    /*     * *** HTML BUILDERS DYNAMIC VIEWS  **** */
-
-    // Builds html for Find Car
-    // pre: parameter is  $row variable
+    // Builds html for search_results
+    // pre: parameter is $row variable
     public function build_searched_car($row) {
         $cars_found = "";
-        $car_id=$row['ID'];
-        $car_spec_id=$row['CarSpecsID'];
+        $car_id=$row['carID'];
+        $car_spec_id=$row['carspecsID'];
+//        $car_id = 9;
+//        $car_spec_id = 4; 
         echo $cars_found.=" 
         <div class='search_item'>
             <img src='data:" . $row['picture_type'] . ";base64," . base64_encode($row['picture']) . "'>
@@ -199,14 +187,15 @@ class Car {
                 <div class='" . $row['Color'] . "'> 
             </div> 
         </div>
-        <div id='rent' class='car_rent' onclick='" . $this->update_car_as_rented($car_id,$car_spec_id) . "'> Rent Car</div>
+        <div id='rent' class='car_rent' onclick='rent_car(" . $car_id . "," . $car_spec_id . ")'> Rent Car
+        </div>
     </div>";
     }
-    
+
     public function build_tainted_car($row) {
         $cars_found = "";
         $car_id=$row['carID'];
-        $car_spec_id=$row['carspecsID'];
+        $car_spec_id=$row['carspecsID'];        
         $current_status = $row['carStatus'];
         if ($current_status == 1) {
             $event = "Returned";
@@ -214,8 +203,7 @@ class Car {
             $x_date = date_create($row['returnDate']);
         } elseif ($current_status == 2) {
             $event = "Rented";
-            $show_button = "<td><div class='return_car' onclick='show_message()';" 
-                    . $this->update_car_as_available($car_id, $car_spec_id) ."'>Return</div></td>";
+            $show_button = "<td><div class='return_car' onclick='return_car(" . $car_id . "," . $car_spec_id . ")'>Return</div></td>";
             $x_date = date_create($row['rentDate']);
         }
 
@@ -250,32 +238,31 @@ class Car {
                    " . $show_button . "                
             </tr>";
     }
-    
-    
-    /***** TOKENIZE SEARCH *****/
-    
-    function LIKE($column,$words){
-    $LIKE="";
-    $index=0;
-    foreach($words as $word){
-        if($index>0) //the first time we don't want to add LIKE
-        $LIKE.=" OR ";
-        
-        $LIKE.=" $column LIKE '%$word%' ";  
-        $index++;
-    }
-    return $LIKE;
-}
 
-function tokenize($data,$delimiter=","){
+    /*     * *** TOKENIZE SEARCH **** */
 
-    $array = array();
-    $token = strtok($data, $delimiter);
-    while($token!==false){
-        array_push($array,$token);
-         $token = strtok($delimiter);
+    function LIKE($column, $words) {
+        $LIKE = "";
+        $index = 0;
+        foreach ($words as $word) {
+            if ($index > 0) //the first time we don't want to add LIKE
+                $LIKE.=" OR ";
+
+            $LIKE.=" $column LIKE '%$word%' ";
+            $index++;
+        }
+        return $LIKE;
     }
-return $array;
-}
+
+    function tokenize($data, $delimiter = ",") {
+
+        $array = array();
+        $token = strtok($data, $delimiter);
+        while ($token !== false) {
+            array_push($array, $token);
+            $token = strtok($delimiter);
+        }
+        return $array;
+    }
 
 }

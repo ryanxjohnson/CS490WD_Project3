@@ -1,33 +1,114 @@
-/* 
- * To change this license header, choose License Headers in Project Properties.
- * To change this template file, choose Tools | Templates
- * and open the template in the editor.
- */
+function ajaxObject() {
+    var ajax;
+    if (window.XMLHttpRequest)
+        ajax = new XMLHttpRequest(); //non-IE browser
+    else
+        ajax = new ActiveXObject("Microsoft.XMLHTTP");//IE browser
+
+    return ajax;
+}
+
+function $(id) {
+    return document.getElementById(id);
+}
 
 function init() {
     make_search_field("search_field", "Type car make, model, year, color, etc.");
-//    $("username").innerHTML = "$_SESSION['real_name']";
-//    show_info("username", "username");
-//    show_info("search_results","search_results");
-//    show_info("rented_cars", "rented_cars");
-//    show_info("returned_cars", "returned_cars");
+    $("username").innerHTML = "$_SESSION['real_name']";
+    show_info("search_results", "search_results");
+    show_info("search_field", $("search_field").value);
+    show_info("rented_cars", "rented_cars");
+    show_info("returned_cars", "returned_cars");
 
 }
 
-function logout(){
+/* Logout is good */
+function logout() {
     var data = new FormData();
-    data.append("type", "logout"); 
+    data.append("type", "logout");
     var ajax = ajaxObject();
-    ajax.onreadystatechange = function() { 
-        if (ajax.readyState === 4 && ajax.status === 200) { 
-            if(ajax.responseText.trim()=="success")
-              window.location.assign("index.html");           
+    ajax.onreadystatechange = function () {
+        if (ajax.readyState === 4 && ajax.status === 200) {
+
+            if (ajax.responseText.trim() == "success")
+            window.location.assign("index.html");
         }
     };
     ajax.open("POST", "cars.php");
     ajax.send(data); //send the data
 }
 
+//find_car(0, 'Year')
+function find_car() {
+    var data = new FormData();
+    alert("hi",$("search_field").value);
+    data.append("search_field", $("search_field").value);
+    $("find_car_loading").className = "loading";
+    var ajax = ajaxObject();
+    ajax.onreadystatechange = function () {
+        if (ajax.readyState === 4 && ajax.status === 200) {
+            $("search_results").innerHTML = ajax.responseText;
+            show_info("search_results", "search_results");
+            $("find_car_loading").className = "loading_hidden";
+        }
+    };
+    ajax.open("POST", "cars.php");
+    ajax.send(data);
+}
+
+function show_info(type, id) {
+    var data = new FormData();
+    data.append("type", type);
+    var ajax = ajaxObject();
+    ajax.onreadystatechange = function () {
+        if (ajax.readyState === 4 && ajax.status === 200) {
+            $(id).innerHTML = ajax.responseText;
+        }
+    };
+    ajax.open("POST", "cars.php");
+    ajax.send(data); //send the data
+}
+
+function rent_car(car_id, car_spec_id) {
+    var data = new FormData();
+    data.append("type", "rent");
+    data.append("car_id", car_id);
+    data.append("car_spec_id", car_spec_id);
+
+    var ajax = ajaxObject();
+    ajax.onreadystatechange = function () {
+        if (ajax.readyState === 4 && ajax.status === 200) {
+            if (ajax.responseText.trim() == "success") //if everything goes well   
+                show_info("search_results", "search_results");
+            show_info("rented_cars", "rented_cars"); // refresh    
+            show_info("returned_cars", "returned_cars");
+            show_message();
+            $("message").innerHTML = " Car has been rented ";
+        }
+    };
+    ajax.open("POST", "cars.php");
+    ajax.send(data); //send the data
+}
+
+function return_car(car_id, car_spec_id) {
+    var data = new FormData();
+    data.append("type", "return");
+    data.append("car_id", car_id);
+    data.append("car_spec_id", car_spec_id);
+    var ajax = ajaxObject();
+    ajax.onreadystatechange = function () {
+        if (ajax.readyState === 4 && ajax.status === 200) {
+            if (ajax.responseText.trim() == "success") //if everything goes well
+                show_info("search_results", "search_results");
+            show_info("rented_cars", "rented_cars"); // refresh
+            show_info("returned_cars", "returned_cars");
+            show_message();
+            $("message").innerHTML = " Car has been returned ";
+        }
+    };
+    ajax.open("POST", "cars.php"); //cars.php
+    ajax.send(data); //send the data
+}
 
 function close_message() {
     $("background").style.display = "none";
@@ -38,109 +119,19 @@ function close_message() {
 function show_message() {
     $("background").style.display = "block";
     $("message_box").style.display = "block";
-    $("message").innerHTML = " Showing a message ";
 }
 
-// edit this!
-function rent_car(carID){// carID
-    var data = new FormData();
-    data.append("type", "drop"); // type. rent || return
-    data.append("carID", carID); // carID, carID
-    
-    var ajax = ajaxObject();
-    ajax.onreadystatechange = function() { 
-        if (ajax.readyState === 4 && ajax.status === 200) { 
-            if(ajax.responseText.trim()=="success") //if everything goes well
-              show_info("find_car","find_car"); //refresh the enrolled courses  // findcars, findcars
-        }
-    };
-    ajax.open("POST", "cars.php"); //cars.php
-    ajax.send(data); //send the data
-}
+function send_data(ajax, link, data) {
+    ajax.open("POST", link, true);
+    ajax.setRequestHeader("Content-type", "application/x-www-form-urlencoded");
+    var request = "";
+    var first_key = true;
 
-function return_car(carID) {
-    
-}
-
-function show_info(type,id) {
-    
-    var data = new FormData();
-    data.append("type", type); 
-    var ajax = ajaxObject();
-    ajax.onreadystatechange = function() { 
-        if (ajax.readyState === 4 && ajax.status === 200) { 
-            $(id).innerHTML = ajax.responseText;            
-        }
-    };
-    ajax.open("POST", "account.php"); 
-    ajax.send(data); //send the data
-}
-
-
-// edit this!
-function rent_car(car_id){
-    var data = new FormData();
-    data.append("type", "rent");
-    data.append("car_id", car_id);
-    var ajax = ajaxObject();
-    ajax.onreadystatechange = function() { 
-        if (ajax.readyState === 4 && ajax.status === 200) { 
-            
-            if(ajax.responseText.trim()=="success") //if everything goes well
-                            
-              show_info("search_results","search_results");
-              show_info("rented_cars","rented_cars"); // refresh
-        }
-    };
-    ajax.open("POST", "cars.php");
-    ajax.send(data); //send the data
-}
-// refactor this 
-function return_car(car_id) {
-    var data = new FormData();
-    data.append("type", "return"); 
-    data.append("car_id", car_id);
-    var ajax = ajaxObject();
-    ajax.onreadystatechange = function() { 
-        if (ajax.readyState === 4 && ajax.status === 200) { 
-            if(ajax.responseText.trim()=="success") //if everything goes well
-              show_info("rented_cars","rented_cars"); // refresh
-          //show_info("returned_cars", "returned_cars");
-        }
-    };
-    ajax.open("POST", "cars.php"); //cars.php
-    ajax.send(data); //send the data
-}
-
-function show_info(type,id) {
-    var data = new FormData();
-    data.append("type", type); 
-    var ajax = ajaxObject();
-    ajax.onreadystatechange = function() { 
-        if (ajax.readyState === 4 && ajax.status === 200) { 
-            $(id).innerHTML = ajax.responseText;            
-        }
-    };
-    ajax.open("POST", "cars.php"); 
-    ajax.send(data); //send the data
-}
-
-function showUser(str) {
-  if (str=="") {
-    document.getElementById("search_results").innerHTML="";
-    return;
-  } 
-  if (window.XMLHttpRequest) {
-    // code for IE7+, Firefox, Chrome, Opera, Safari
-    xmlhttp=new XMLHttpRequest();
-  } else { // code for IE6, IE5
-    xmlhttp=new ActiveXObject("Microsoft.XMLHTTP");
-  }
-  xmlhttp.onreadystatechange=function() {
-    if (xmlhttp.readyState==4 && xmlhttp.status==200) {
-      document.getElementById("search_results").innerHTML=xmlhttp.responseText;
+    for (var key in data) {
+        if (!first_key)
+            request += " & ";
+        request += key + "=" + data[key];
+        first_key = false;
     }
-  }
-  xmlhttp.open("GET","cars.php?q="+str,true);
-  xmlhttp.send();
+    ajax.send(request);
 }
