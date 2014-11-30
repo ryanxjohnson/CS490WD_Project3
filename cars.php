@@ -11,7 +11,7 @@ if (isset($_POST['type']) && is_session_active()) {
             //echo $search=$_POST['search_field'];
             break;
         case "name":
-            echo $name=$_SESSION["real_name"];
+            echo $name = $_SESSION["real_name"];
             break;
         case "search_results":
             include("views/find_car.php");
@@ -29,43 +29,29 @@ if (isset($_POST['type']) && is_session_active()) {
         case "rent":
             $car_id = $_POST['car_id'];
             $car_spec_id = $_POST['car_spec_id'];
-            $query = "UPDATE car 
-                INNER JOIN carspecs ON carspecs.ID = car.CarSpecsID
-                SET car.status='2'
-                WHERE car.ID='$car_id' AND carspecs.ID='$car_spec_id'";
-            $result = mysqli_query($db_server, $query);
+            $result=update_car_status($car_id,$car_spec_id,$db_server);
             if ($result) {
-                    $query3= "SELECT MAX(CAST(rental.ID as UNSIGNED)) as max FROM rental;";
-                    $result3 = mysqli_query($db_server, $query3);
-                    $row=mysqli_fetch_array($result3);
-                    $id=$row['max'];
-                    $next_id=$id+1;
-                //echo $next_id;
-        $query2="INSERT INTO cars.rental (ID, rentDate, returnDate, status, CustomerID, carID) 
-	VALUES ('$next_id', '2014-11-29', '2014-11-29', 2, '" .$_SESSION["username"] ."', '$car_id');";
-                    $result = mysqli_query($db_server, $query2); 
+                create_rental_record($car_id, $db_server);
                 echo "success";
             }
             break;
         case "return":
             $car_id = $_POST['car_id'];
             $car_spec_id = $_POST['car_spec_id'];
-            $query = "UPDATE car 
-                INNER JOIN carspecs ON carspecs.ID = car.CarSpecsID
-                SET car.status='1'
-                WHERE car.ID='$car_id' AND carspecs.ID='$car_spec_id';";
-            $result = mysqli_query($db_server, $query);
+//            $query = "UPDATE car 
+//                INNER JOIN carspecs ON carspecs.ID = car.CarSpecsID
+//                SET car.status='1'
+//                WHERE car.ID='$car_id' AND carspecs.ID='$car_spec_id';";
+            $result= update_rental_record($car_id,$car_spec_id, $db_server);
+            //$result = mysqli_query($db_server, $query);
             if ($result) {
-                    $query3= "SELECT MAX(CAST(rental.ID as UNSIGNED)) as max FROM rental;";
-                    $result3 = mysqli_query($db_server, $query3);
-                    $row=mysqli_fetch_array($result3);
-                    $id=$row['max'];
-                    $next_id=$id+1;
-                echo $next_id;
-                    $query2="INSERT INTO cars.rental (ID, rentDate, returnDate, status, CustomerID, carID) 
-	VALUES ('$next_id', '2014-11-29', '2014-11-29', 1, '" .$_SESSION["username"] ."', '$car_id');";
-                    $result2 = mysqli_query($db_server, $query2); 
-                //echo "success";
+               
+                
+//                $next_id = get_max_rental_id($db_server);
+//                $query2 = "INSERT INTO cars.rental (ID, rentDate, returnDate, status, CustomerID, carID) 
+//	VALUES ('$next_id', '2014-11-29', '2014-11-29', 1, '" . $_SESSION["username"] . "', '$car_id');";
+//                $result2 = mysqli_query($db_server, $query2);
+                echo "success";
             }
             break;
     }
@@ -76,7 +62,6 @@ function is_session_active() {
 }
 
 function logout() {
-    // delete the session of the user
     $_SESSION = array();
     if (ini_get("session.use_cookies")) {
         $params = session_get_cookie_params();
@@ -86,12 +71,50 @@ function logout() {
     session_destroy();
 }
 
-function get_max_rental_id($db_server){
+// gets the highest ID since the key isn't auto incrementing
+function get_max_rental_id($db_server) {
+
+    $query3 = "SELECT MAX(CAST(rental.ID as UNSIGNED)) as max FROM rental;";
+    $result3 = mysqli_query($db_server, $query3);
+    $row = mysqli_fetch_array($result3);
+    $id = $row['max'];
+    $next_id = $id + 1;
+    return $next_id;
+}
+
+function get_current_status($car_id,$car_spec_id,$db_server) {
+    $query="select car.ID, carspecs.ID, car.status, rental.carID from car
+                INNER JOIN carspecs on carspecs.ID = car.carspecsID 
+                INNER JOIN rental on rental.ID = car.ID
+WHERE car.ID = '$car_id' AND carspecs.ID = '$car_spec_id';";
+        $result = mysqli_query($db_server, $query);
+    return $result;
     
-    $query3= "SELECT MAX(CAST(ID as UNSIGNED)) FROM rental;";
-     $result = mysqli_query($db_server, $query3);
-     $row = mysqli_fetch_array($result);
-     $y=$row['ID'];
-     $x=$y+1;
-     return $x;
+}
+
+// another param could be new_status
+function update_car_status($car_id,$car_spec_id,$db_server) {
+    $query = "UPDATE car 
+                INNER JOIN carspecs ON carspecs.ID = car.CarSpecsID
+                SET car.status='2' 
+                WHERE car.ID='$car_id' AND carspecs.ID='$car_spec_id'";
+    $result = mysqli_query($db_server, $query);
+    return $result;
+}
+
+function create_rental_record($car_id, $db_server) {
+    $next_id = get_max_rental_id($db_server);
+    $query2 = "INSERT INTO cars.rental (ID, rentDate, returnDate, status, CustomerID, carID) 
+	VALUES ('$next_id', '2014-11-29', 2009-01-01, 2, '" . $_SESSION["username"] . "', '$car_id');";
+    $result = mysqli_query($db_server, $query2);
+}
+
+function update_rental_record($car_id,$car_spec_id, $db_server) {
+    $query="UPDATE rental 
+INNER JOIN car on car.ID = rental.carID
+ INNER JOIN carspecs on carspecs.ID = car.carspecsID 
+                SET rental.status='1', rental.returnDate='2014-11-30', car.status='1'
+                WHERE car.ID='$car_id' AND car.carspecsID='$car_spec_id' AND rental.CustomerID='" . $_SESSION["username"] . "' ;";
+    $result = mysqli_query($db_server, $query);
+    return $result;
 }

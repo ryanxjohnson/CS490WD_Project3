@@ -8,6 +8,11 @@ function ajaxObject() {
     return ajax;
 }
 
+function view_cars_key(event) {
+    if (event.keyCode === 13) //ENTER KEY
+        find_car();
+}
+
 function $(id) {
     return document.getElementById(id);
 }
@@ -104,7 +109,7 @@ function return_car(car_id, car_spec_id) {
                 show_info("rented_cars", "rented_cars");
                 show_info("returned_cars", "returned_cars");
             show_message();
-            $("message").innerHTML = ajax.responseText.trim();// " Car has been returned ";                
+            $("message").innerHTML =  " Car has been returned ";                
             
 
         }
@@ -139,7 +144,3 @@ function send_data(ajax, link, data) {
     ajax.send(request);
 }
 
-function view_students_key(event) {
-    if (event.keyCode == 13) //ENTER KEY
-        find_car();
-}
