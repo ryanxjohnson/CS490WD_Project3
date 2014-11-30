@@ -52,8 +52,15 @@ class Car {
         $order_by = " ORDER BY Year ";
         //$order_by = $this->check_order_by();
 
-        return "SELECT * FROM car INNER JOIN carspecs on carspecs.ID = car.CarSpecsID 
-        WHERE car.status = 1 AND ($LIKE) $order_by";
+        return "SELECT car.CarSpecsID as carspecsID, carspecs.Make, carspecs.Model, carspecs.Year, carspecs.Size, 
+                car.Color, car.ID as carID, car.picture, car.picture_type, car.status as carStatus, 
+                rental.ID as rentID, rental.rentDate as rentDate, 
+                rental.returnDate as returnDate, rental.status as rentStatus 
+                FROM car 
+                INNER JOIN carspecs on carspecs.ID = car.carspecsID 
+                INNER JOIN rental on rental.ID = car.ID
+                WHERE car.status= 1 AND ($LIKE) $order_by";
+
     }
 
     // pre: no params. car status must be 1
@@ -159,7 +166,6 @@ class Car {
         } elseif (!isset($_POST['search_field']) || trim($_POST['search_field']) == "" || trim($_POST['search_field']) == null) {
             echo "empty search returns all results";
             return $this->get_available_cars();
-            //return $this->get_cars_by_search($_POST['search_field']);
         }
     }
 
@@ -171,8 +177,7 @@ class Car {
         $cars_found = "";
         $car_id=$row['carID'];
         $car_spec_id=$row['carspecsID'];
-//        $car_id = 9;
-//        $car_spec_id = 4; 
+
         echo $cars_found.=" 
         <div class='search_item'>
             <img src='data:" . $row['picture_type'] . ";base64," . base64_encode($row['picture']) . "'>

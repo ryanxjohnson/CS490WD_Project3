@@ -41,13 +41,14 @@ function find_car() {
     var ajax = ajaxObject();
     var form = $("search_field");
     var data = new FormData(form);
+    data.append("type", "search_results");
     data.append("search_field", $("search_field").value);
-    $("find_car_loading").className = "loading";
     
+    $("find_car_loading").className = "loading";
     ajax.onreadystatechange = function () {
         if (ajax.readyState === 4 && ajax.status === 200) {
             $("search_results").innerHTML = ajax.responseText;
-            show_info("search_results", "search_results");
+            //show_info("search_results", "search_results");
             $("find_car_loading").className = "loading_hidden";
         }
     };
