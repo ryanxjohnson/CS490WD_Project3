@@ -5,11 +5,11 @@ include "connection.php";
 session_start();
 if (isset($_POST['type'])) {// && is_session_active()) {
     $type = $_POST['type'];
-    $name = $_SESSION["real_name"];
+    //echo $search=$_POST['search_field'];
 
     switch ($type) {
         case "name":
-            echo $name;
+            echo $name=$_SESSION["real_name"];
             break;
         case "search_results":
             include("views/find_car.php");
@@ -33,6 +33,9 @@ if (isset($_POST['type'])) {// && is_session_active()) {
                 WHERE car.ID='$car_id' AND carspecs.ID='$car_spec_id'";
             $result = mysqli_query($db_server, $query);
             if ($result) {
+        $query2="INSERT INTO cars.rental (ID, rentDate, returnDate, status, CustomerID, carID) 
+	VALUES ('103', '2014-11-29', '2014-11-29', 2, '" .$_SESSION["real_name"] ."', '$car_id');";
+                    $result = mysqli_query($db_server, $query2); 
                 echo "success";
             }
             break;
@@ -45,6 +48,9 @@ if (isset($_POST['type'])) {// && is_session_active()) {
                 WHERE car.ID='$car_id' AND carspecs.ID='$car_spec_id';";
             $result = mysqli_query($db_server, $query);
             if ($result) {
+                    $query2="INSERT INTO cars.rental (ID, rentDate, returnDate, status, CustomerID, carID) 
+	VALUES ('104', '2014-11-29', '2014-11-29', 1, '" .$_SESSION["real_name"] ."', '$car_id');";
+                    $result = mysqli_query($db_server, $query2); 
                 echo "success";
             }
             break;
