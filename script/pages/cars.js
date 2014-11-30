@@ -84,7 +84,7 @@ function rent_car(car_id, car_spec_id) {
             show_info("returned_cars", "returned_cars");
             find_car();
             show_message();
-            $("message").innerHTML = " Car has been rented ";
+            $("message").innerHTML =  " Car has been rented ";
         }
     };
     ajax.open("POST", "cars.php");
@@ -104,7 +104,7 @@ function return_car(car_id, car_spec_id) {
                 show_info("rented_cars", "rented_cars");
                 show_info("returned_cars", "returned_cars");
             show_message();
-            $("message").innerHTML = " Car has been returned ";                
+            $("message").innerHTML = ajax.responseText.trim();// " Car has been returned ";                
             
 
         }

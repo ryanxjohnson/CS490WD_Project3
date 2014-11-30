@@ -35,8 +35,12 @@ if (isset($_POST['type']) && is_session_active()) {
                 WHERE car.ID='$car_id' AND carspecs.ID='$car_spec_id'";
             $result = mysqli_query($db_server, $query);
             if ($result) {
-                $next_id = get_max_rental_id($db_server);
-                
+                    $query3= "SELECT MAX(CAST(rental.ID as UNSIGNED)) as max FROM rental;";
+                    $result3 = mysqli_query($db_server, $query3);
+                    $row=mysqli_fetch_array($result3);
+                    $id=$row['max'];
+                    $next_id=$id+1;
+                //echo $next_id;
         $query2="INSERT INTO cars.rental (ID, rentDate, returnDate, status, CustomerID, carID) 
 	VALUES ('$next_id', '2014-11-29', '2014-11-29', 2, '" .$_SESSION["username"] ."', '$car_id');";
                     $result = mysqli_query($db_server, $query2); 
@@ -52,16 +56,16 @@ if (isset($_POST['type']) && is_session_active()) {
                 WHERE car.ID='$car_id' AND carspecs.ID='$car_spec_id';";
             $result = mysqli_query($db_server, $query);
             if ($result) {
-                $next_id = get_max_rental_id($db_server);
-                
-                
-                
-                
-                
+                    $query3= "SELECT MAX(CAST(rental.ID as UNSIGNED)) as max FROM rental;";
+                    $result3 = mysqli_query($db_server, $query3);
+                    $row=mysqli_fetch_array($result3);
+                    $id=$row['max'];
+                    $next_id=$id+1;
+                echo $next_id;
                     $query2="INSERT INTO cars.rental (ID, rentDate, returnDate, status, CustomerID, carID) 
 	VALUES ('$next_id', '2014-11-29', '2014-11-29', 1, '" .$_SESSION["username"] ."', '$car_id');";
-                    $result = mysqli_query($db_server, $query2); 
-                echo "success";
+                    $result2 = mysqli_query($db_server, $query2); 
+                //echo "success";
             }
             break;
     }
@@ -84,8 +88,8 @@ function logout() {
 
 function get_max_rental_id($db_server){
     
-    $query= "SELECT MAX(CAST(ID as UNSIGNED)) FROM rental;";
-     $result = mysqli_query($db_server, $query);
+    $query3= "SELECT MAX(CAST(ID as UNSIGNED)) FROM rental;";
+     $result = mysqli_query($db_server, $query3);
      $row = mysqli_fetch_array($result);
      $y=$row['ID'];
      $x=$y+1;
