@@ -5,10 +5,7 @@ include "connection.php";
 session_start();
 if (isset($_POST['type']) && is_session_active()) {
     $type = $_POST['type'];
-    
-   // if (isset($_POST['search']) && trim($_POST['search']) != "") {
-    //$search=$_POST['search_field'];
-    //}
+    //var_dump($_POST);die;
     switch ($type) {
         case "search_field":
             echo $search=$_POST['search_field'];

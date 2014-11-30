@@ -15,7 +15,6 @@ function $(id) {
 function init() {
     make_search_field("search_field", "Type car make, model, year, color, etc.");
     show_info("name","username");
-    show_info("search_results", "search_results");
     show_info("search_field", $("search_field").value);
     show_info("rented_cars", "rented_cars");
     show_info("returned_cars", "returned_cars");
@@ -38,14 +37,15 @@ function logout() {
 }
 
 function find_car() {
-    var data = new FormData();
-    
+   
+    var ajax = ajaxObject();
+    var form = $("search_field");
+    var data = new FormData(form);
     data.append("search_field", $("search_field").value);
     $("find_car_loading").className = "loading";
-    var ajax = ajaxObject();
+    
     ajax.onreadystatechange = function () {
         if (ajax.readyState === 4 && ajax.status === 200) {
-            alert(ajax.resposeText);
             $("search_results").innerHTML = ajax.responseText;
             show_info("search_results", "search_results");
             $("find_car_loading").className = "loading_hidden";
