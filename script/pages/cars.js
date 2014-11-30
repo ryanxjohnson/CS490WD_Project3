@@ -43,12 +43,10 @@ function find_car() {
     var data = new FormData(form);
     data.append("type", "search_results");
     data.append("search_field", $("search_field").value);
-    
     $("find_car_loading").className = "loading";
     ajax.onreadystatechange = function () {
         if (ajax.readyState === 4 && ajax.status === 200) {
             $("search_results").innerHTML = ajax.responseText;
-            //show_info("search_results", "search_results");
             $("find_car_loading").className = "loading_hidden";
         }
     };
@@ -66,7 +64,7 @@ function show_info(type, id) {
         }
     };
     ajax.open("POST", "cars.php");
-    ajax.send(data); //send the data
+    ajax.send(data);
 }
 
 function rent_car(car_id, car_spec_id) {
@@ -74,14 +72,17 @@ function rent_car(car_id, car_spec_id) {
     data.append("type", "rent");
     data.append("car_id", car_id);
     data.append("car_spec_id", car_spec_id);
+    
 
     var ajax = ajaxObject();
     ajax.onreadystatechange = function () {
         if (ajax.readyState === 4 && ajax.status === 200) {
             if (ajax.responseText.trim() == "success") 
-                show_info("search_results", "search_results");
+            
+            show_info("search_results", "search_results");
             show_info("rented_cars", "rented_cars");   
             show_info("returned_cars", "returned_cars");
+            find_car();
             show_message();
             $("message").innerHTML = " Car has been rented ";
         }
@@ -98,12 +99,14 @@ function return_car(car_id, car_spec_id) {
     var ajax = ajaxObject();
     ajax.onreadystatechange = function () {
         if (ajax.readyState === 4 && ajax.status === 200) {
-            if (ajax.responseText.trim() == "success") //if everything goes well
+            if (ajax.responseText.trim() == "success") 
                 show_info("search_results", "search_results");
-            show_info("rented_cars", "rented_cars"); // refresh
-            show_info("returned_cars", "returned_cars");
+                show_info("rented_cars", "rented_cars");
+                show_info("returned_cars", "returned_cars");
             show_message();
-            $("message").innerHTML = " Car has been returned ";
+            $("message").innerHTML = " Car has been returned ";                
+            
+
         }
     };
     ajax.open("POST", "cars.php"); //cars.php
@@ -138,5 +141,5 @@ function send_data(ajax, link, data) {
 
 function view_students_key(event) {
     if (event.keyCode == 13) //ENTER KEY
-        view_students();
+        find_car();
 }

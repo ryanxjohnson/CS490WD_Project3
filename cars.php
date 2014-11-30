@@ -8,7 +8,7 @@ if (isset($_POST['type']) && is_session_active()) {
     //var_dump($_POST);die;
     switch ($type) {
         case "search_field":
-            echo $search=$_POST['search_field'];
+            //echo $search=$_POST['search_field'];
             break;
         case "name":
             echo $name=$_SESSION["real_name"];
@@ -35,8 +35,10 @@ if (isset($_POST['type']) && is_session_active()) {
                 WHERE car.ID='$car_id' AND carspecs.ID='$car_spec_id'";
             $result = mysqli_query($db_server, $query);
             if ($result) {
+                $next_id = get_max_rental_id($db_server);
+                
         $query2="INSERT INTO cars.rental (ID, rentDate, returnDate, status, CustomerID, carID) 
-	VALUES ('103', '2014-11-29', '2014-11-29', 2, '" .$_SESSION["username"] ."', '$car_id');";
+	VALUES ('$next_id', '2014-11-29', '2014-11-29', 2, '" .$_SESSION["username"] ."', '$car_id');";
                     $result = mysqli_query($db_server, $query2); 
                 echo "success";
             }
@@ -50,8 +52,14 @@ if (isset($_POST['type']) && is_session_active()) {
                 WHERE car.ID='$car_id' AND carspecs.ID='$car_spec_id';";
             $result = mysqli_query($db_server, $query);
             if ($result) {
+                $next_id = get_max_rental_id($db_server);
+                
+                
+                
+                
+                
                     $query2="INSERT INTO cars.rental (ID, rentDate, returnDate, status, CustomerID, carID) 
-	VALUES ('24', '2014-11-29', '2014-11-29', 1, '" .$_SESSION["username"] ."', '$car_id');";
+	VALUES ('$next_id', '2014-11-29', '2014-11-29', 1, '" .$_SESSION["username"] ."', '$car_id');";
                     $result = mysqli_query($db_server, $query2); 
                 echo "success";
             }
@@ -72,4 +80,14 @@ function logout() {
         );
     }
     session_destroy();
+}
+
+function get_max_rental_id($db_server){
+    
+    $query= "SELECT MAX(CAST(ID as UNSIGNED)) FROM rental;";
+     $result = mysqli_query($db_server, $query);
+     $row = mysqli_fetch_array($result);
+     $y=$row['ID'];
+     $x=$y+1;
+     return $x;
 }

@@ -49,8 +49,7 @@ class Car {
         $LIKE.=" OR " . $this->LIKE("Size", $words);
         $LIKE.=" OR " . $this->LIKE("Year", $words);
 
-        $order_by = " ORDER BY Year ";
-        //$order_by = $this->check_order_by();
+        $order_by = " ORDER BY carspecs.Year ";
 
         return "SELECT car.CarSpecsID as carspecsID, carspecs.Make, carspecs.Model, carspecs.Year, carspecs.Size, 
                 car.Color, car.ID as carID, car.picture, car.picture_type, car.status as carStatus, 
@@ -153,13 +152,17 @@ class Car {
         return $result;
     }
 
-    /* CHECK HELPERS */
+    /* PRE-QUERY CHECKS */
 
     // pre: checks the value in the seach field variable. This is probably bad form to access POST like this.
     // post: returns query as string
     public function search_field_check() {
-        //   $data=$_POST['search_field'];
 
+        if ($_POST['search_field'] == "Type car make, model, year, color, etc."){
+            echo "empty search returns all results";
+            return $this->get_available_cars();
+        }
+        
         if (isset($_POST['search_field']) && trim($_POST['search_field']) != "") {
             echo "Showing results for the search '" . $_POST['search_field'] . "'";
             return $this->get_cars_by_search($_POST['search_field']);
