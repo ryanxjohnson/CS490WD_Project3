@@ -96,7 +96,7 @@ class Car {
                 INNER JOIN car on car.CarSpecsID = carspecs.ID 
                 INNER JOIN rental on rental.carID = car.ID 
                 INNER JOIN customer on rental.CustomerID = customer.ID 
-                WHERE car.status= 1 ORDER BY rentID";
+                WHERE car.status='1' ORDER BY rental.returnDate";
     }
 
     /*     * *** UPDATE SQL STATEMENTS **** */
