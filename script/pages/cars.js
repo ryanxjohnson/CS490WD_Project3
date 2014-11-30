@@ -8,7 +8,8 @@ function ajaxObject() {
     return ajax;
 }
 
-function view_cars_key(event) {
+function view_cars(event) {
+    alert(event);
     if (event.keyCode === 13) //ENTER KEY
         find_car();
 }
@@ -26,7 +27,7 @@ function init() {
 
 }
 
-/* Logout is good */
+
 function logout() {
     var data = new FormData();
     data.append("type", "logout");
@@ -38,7 +39,7 @@ function logout() {
         }
     };
     ajax.open("POST", "cars.php");
-    ajax.send(data); //send the data
+    ajax.send(data);
 }
 
 function find_car() {
@@ -83,7 +84,6 @@ function rent_car(car_id, car_spec_id) {
     ajax.onreadystatechange = function () {
         if (ajax.readyState === 4 && ajax.status === 200) {
             if (ajax.responseText.trim() == "success") 
-            
             show_info("search_results", "search_results");
             show_info("rented_cars", "rented_cars");   
             show_info("returned_cars", "returned_cars");
@@ -93,7 +93,7 @@ function rent_car(car_id, car_spec_id) {
         }
     };
     ajax.open("POST", "cars.php");
-    ajax.send(data); //send the data
+    ajax.send(data);
 }
 
 function return_car(car_id, car_spec_id) {
@@ -129,18 +129,4 @@ function show_message() {
     $("message_box").style.display = "block";
 }
 
-function send_data(ajax, link, data) {
-    ajax.open("POST", link, true);
-    ajax.setRequestHeader("Content-type", "application/x-www-form-urlencoded");
-    var request = "";
-    var first_key = true;
-
-    for (var key in data) {
-        if (!first_key)
-            request += " & ";
-        request += key + "=" + data[key];
-        first_key = false;
-    }
-    ajax.send(request);
-}
 
