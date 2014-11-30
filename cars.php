@@ -3,11 +3,16 @@
 //include "config/db_connection.php";
 include "connection.php";
 session_start();
-if (isset($_POST['type'])) {// && is_session_active()) {
+if (isset($_POST['type']) && is_session_active()) {
     $type = $_POST['type'];
-    //echo $search=$_POST['search_field'];
-
+    
+   // if (isset($_POST['search']) && trim($_POST['search']) != "") {
+    //$search=$_POST['search_field'];
+    //}
     switch ($type) {
+        case "search_field":
+            echo $search=$_POST['search_field'];
+            break;
         case "name":
             echo $name=$_SESSION["real_name"];
             break;
@@ -34,7 +39,7 @@ if (isset($_POST['type'])) {// && is_session_active()) {
             $result = mysqli_query($db_server, $query);
             if ($result) {
         $query2="INSERT INTO cars.rental (ID, rentDate, returnDate, status, CustomerID, carID) 
-	VALUES ('103', '2014-11-29', '2014-11-29', 2, '" .$_SESSION["real_name"] ."', '$car_id');";
+	VALUES ('103', '2014-11-29', '2014-11-29', 2, '" .$_SESSION["username"] ."', '$car_id');";
                     $result = mysqli_query($db_server, $query2); 
                 echo "success";
             }
@@ -49,7 +54,7 @@ if (isset($_POST['type'])) {// && is_session_active()) {
             $result = mysqli_query($db_server, $query);
             if ($result) {
                     $query2="INSERT INTO cars.rental (ID, rentDate, returnDate, status, CustomerID, carID) 
-	VALUES ('104', '2014-11-29', '2014-11-29', 1, '" .$_SESSION["real_name"] ."', '$car_id');";
+	VALUES ('24', '2014-11-29', '2014-11-29', 1, '" .$_SESSION["username"] ."', '$car_id');";
                     $result = mysqli_query($db_server, $query2); 
                 echo "success";
             }

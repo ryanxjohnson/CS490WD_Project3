@@ -14,7 +14,6 @@ function $(id) {
 
 function init() {
     make_search_field("search_field", "Type car make, model, year, color, etc.");
-    //$("username").innerHTML = "$_SESSION['real_name']";
     show_info("name","username");
     show_info("search_results", "search_results");
     show_info("search_field", $("search_field").value);
@@ -30,7 +29,6 @@ function logout() {
     var ajax = ajaxObject();
     ajax.onreadystatechange = function () {
         if (ajax.readyState === 4 && ajax.status === 200) {
-
             if (ajax.responseText.trim() == "success")
             window.location.assign("index.html");
         }
@@ -39,15 +37,15 @@ function logout() {
     ajax.send(data); //send the data
 }
 
-//find_car(0, 'Year')
 function find_car() {
     var data = new FormData();
-    alert("hi",$("search_field").value);
+    
     data.append("search_field", $("search_field").value);
     $("find_car_loading").className = "loading";
     var ajax = ajaxObject();
     ajax.onreadystatechange = function () {
         if (ajax.readyState === 4 && ajax.status === 200) {
+            alert(ajax.resposeText);
             $("search_results").innerHTML = ajax.responseText;
             show_info("search_results", "search_results");
             $("find_car_loading").className = "loading_hidden";
@@ -79,9 +77,9 @@ function rent_car(car_id, car_spec_id) {
     var ajax = ajaxObject();
     ajax.onreadystatechange = function () {
         if (ajax.readyState === 4 && ajax.status === 200) {
-            if (ajax.responseText.trim() == "success") //if everything goes well   
+            if (ajax.responseText.trim() == "success") 
                 show_info("search_results", "search_results");
-            show_info("rented_cars", "rented_cars"); // refresh    
+            show_info("rented_cars", "rented_cars");   
             show_info("returned_cars", "returned_cars");
             show_message();
             $("message").innerHTML = " Car has been rented ";
@@ -135,4 +133,9 @@ function send_data(ajax, link, data) {
         first_key = false;
     }
     ajax.send(request);
+}
+
+function view_students_key(event) {
+    if (event.keyCode == 13) //ENTER KEY
+        view_students();
 }

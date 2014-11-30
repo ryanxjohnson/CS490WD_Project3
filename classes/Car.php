@@ -159,6 +159,7 @@ class Car {
         } elseif (!isset($_POST['search_field']) || trim($_POST['search_field']) == "" || trim($_POST['search_field']) == null) {
             echo "empty search returns all results";
             return $this->get_available_cars();
+            //return $this->get_cars_by_search($_POST['search_field']);
         }
     }
 
