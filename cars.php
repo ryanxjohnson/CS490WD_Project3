@@ -62,7 +62,6 @@ function logout() {
 
 // gets the highest ID since the key isn't auto incrementing
 function get_max_rental_id($db_server) {
-
     $query3 = "SELECT MAX(CAST(rental.ID as UNSIGNED)) as max FROM rental;";
     $result3 = mysqli_query($db_server, $query3);
     $row = mysqli_fetch_array($result3);
@@ -83,7 +82,7 @@ function update_car_status($car_id, $car_spec_id, $db_server) {
 function create_rental_record($car_id, $db_server) {
     $next_id = get_max_rental_id($db_server);
     $query2 = "INSERT INTO cars.rental (ID, rentDate, returnDate, status, CustomerID, carID) 
-	VALUES ('$next_id', '2014-11-29', 0000-01-01, 2, '" . $_SESSION["username"] . "', '$car_id');";
+	VALUES ('$next_id', '".date("Y-m-d")."', 0000-01-01, 2, '" . $_SESSION["username"] . "', '$car_id');";
     $result = mysqli_query($db_server, $query2);
 }
 
@@ -91,7 +90,7 @@ function update_rental_record($car_id, $car_spec_id, $db_server) {
     $query = "UPDATE rental 
 INNER JOIN car on car.ID = rental.carID
  INNER JOIN carspecs on carspecs.ID = car.carspecsID 
-                SET rental.status='1', rental.returnDate='2014-11-30', car.status='1'
+                SET rental.status='1', rental.returnDate='".date("Y-m-d")."', car.status='1'
                 WHERE car.ID='$car_id' AND car.carspecsID='$car_spec_id' AND rental.CustomerID='" . $_SESSION["username"] . "' ;";
     $result = mysqli_query($db_server, $query);
     return $result;
