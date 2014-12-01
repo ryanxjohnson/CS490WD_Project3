@@ -52,51 +52,50 @@ class Car {
 
         $order_by = " ORDER BY carspecs.Year ";
 
-        return "SELECT car.CarSpecsID as carspecsID, carspecs.Make, carspecs.Model, carspecs.Year, carspecs.Size, 
-                car.Color, car.ID as carID, car.picture, car.picture_type, car.status as carStatus, 
-                rental.ID as rentID, rental.rentDate as rentDate, 
-                rental.returnDate as returnDate, rental.status as rentStatus 
+        return "SELECT car.ID as carID, car.CarSpecsID as carspecsID, carspecs.Make, carspecs.Model, carspecs.Year, carspecs.Size, 
+                car.Color,  car.picture, car.picture_type, car.status as carStatus 
                 FROM car 
                 INNER JOIN carspecs on carspecs.ID = car.carspecsID 
-                INNER JOIN rental on rental.ID = car.ID
                 WHERE car.status= 1 AND ($LIKE) $order_by";
     }
 
     // pre: status = 1 and search_field empty
     public function get_available_cars() {
-        return "SELECT car.CarSpecsID as carspecsID, carspecs.Make, carspecs.Model, carspecs.Year, carspecs.Size, 
-                car.Color, car.ID as carID, car.picture, car.picture_type, car.status as carStatus, 
-                rental.ID as rentID, rental.rentDate as rentDate, 
-                rental.returnDate as returnDate, rental.status as rentStatus 
+        return "SELECT car.ID as carID, car.CarSpecsID as carspecsID, carspecs.Make, carspecs.Model, carspecs.Year, carspecs.Size, 
+                car.Color,  car.picture, car.picture_type, car.status as carStatus 
                 FROM car 
                 INNER JOIN carspecs on carspecs.ID = car.carspecsID 
-                INNER JOIN rental on rental.ID = car.ID
-                WHERE car.status= 1";
+                WHERE car.status= 1 ORDER BY Year";
     }
 
     // pre: status = 2
     public function get_rented_cars() {
         return "SELECT car.CarSpecsID as carspecsID, carspecs.Make, carspecs.Model, carspecs.Year, carspecs.Size, 
                 car.Color, car.ID as carID, car.picture, car.picture_type, car.status as carStatus, 
-                rental.ID as rentID, rental.rentDate as rentDate, 
-                rental.returnDate as returnDate, rental.status as rentStatus 
+                (CAST(rental.ID as UNSIGNED)) as rentID,
+                rental.carID as rentalCarID,
+                rental.rentDate as rentDate, 
+                rental.status as rentStatus 
                 FROM car 
                 INNER JOIN carspecs on carspecs.ID = car.carspecsID 
-                INNER JOIN rental on rental.ID = car.ID
-                WHERE car.status= 2";
+                INNER JOIN rental on rental.carID = car.ID
+                WHERE car.status= 2 AND rental.status=2";
     }
 
     // pre: post: returns all cars that have been rented, then returned
     public function get_rental_history() {
         return "SELECT carspecs.Make, carspecs.Model, carspecs.Year, carspecs.Size, 
                 car.Color, car.ID as carID, car.picture, car.picture_type, car.status as carStatus, car.CarSpecsID as carspecsID, 
-                rental.ID as rentID, rental.rentDate as rentDate, 
+                (CAST(rental.ID as UNSIGNED)) as rentID,
+                 
+                rental.carID as rentalCarID,
+                rental.rentDate as rentDate, 
                 rental.returnDate as returnDate, rental.status as rentStatus 
                 FROM carspecs
                 INNER JOIN car on car.CarSpecsID = carspecs.ID 
                 INNER JOIN rental on rental.carID = car.ID 
                 INNER JOIN customer on rental.CustomerID = customer.ID 
-                WHERE car.status='1' ORDER BY rental.returnDate DESC";
+                WHERE car.status='1' and rental.status='1' ORDER BY rentID DESC";
     }
     /********************/
     /* TOKENIZE SEARCH */

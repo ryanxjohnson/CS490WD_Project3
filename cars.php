@@ -1,15 +1,11 @@
 <?php
-
-//include "config/db_connection.php";
 include "connection.php";
 session_start();
+
 if (isset($_POST['type']) && is_session_active()) {
     $type = $_POST['type'];
     //var_dump($_POST);die;
     switch ($type) {
-        case "search_field":
-            //echo $search=$_POST['search_field'];
-            break;
         case "name":
             echo $name = $_SESSION["real_name"];
             break;
@@ -29,15 +25,17 @@ if (isset($_POST['type']) && is_session_active()) {
         case "rent":
             $car_id = $_POST['car_id'];
             $car_spec_id = $_POST['car_spec_id'];
+            create_rental_record($car_id, $db_server);
             $result = update_car_status($car_id, $car_spec_id, $db_server);
             if ($result) {
-                create_rental_record($car_id, $db_server);
+                //create_rental_record($car_id, $db_server);
                 echo "success";
             }
             break;
         case "return":
             $car_id = $_POST['car_id'];
             $car_spec_id = $_POST['car_spec_id'];
+            
             $result = update_rental_record($car_id, $car_spec_id, $db_server);
             if ($result) {
                 echo "success";
@@ -60,7 +58,7 @@ function logout() {
     session_destroy();
 }
 
-// gets the highest ID since the key isn't auto incrementing
+// gets the highest ID since the key isn't auto incrementing - assumed we can't change schema
 function get_max_rental_id($db_server) {
     $query3 = "SELECT MAX(CAST(rental.ID as UNSIGNED)) as max FROM rental;";
     $result3 = mysqli_query($db_server, $query3);
@@ -86,6 +84,7 @@ function create_rental_record($car_id, $db_server) {
     $result = mysqli_query($db_server, $query2);
 }
 
+// when the car is returned
 function update_rental_record($car_id, $car_spec_id, $db_server) {
     $query = "UPDATE rental 
 INNER JOIN car on car.ID = rental.carID
@@ -96,11 +95,11 @@ INNER JOIN car on car.ID = rental.carID
     return $result;
 }
 
-function get_current_status($car_id, $car_spec_id, $db_server) {
-    $query = "select car.ID, carspecs.ID, car.status, rental.carID from car
-                INNER JOIN carspecs on carspecs.ID = car.carspecsID 
-                INNER JOIN rental on rental.ID = car.ID
-WHERE car.ID = '$car_id' AND carspecs.ID = '$car_spec_id';";
-    $result = mysqli_query($db_server, $query);
-    return $result;
-}
+//function get_current_status($car_id, $car_spec_id, $db_server) {
+//    $query = "select car.ID, carspecs.ID, car.status, rental.carID from car
+//                INNER JOIN carspecs on carspecs.ID = car.carspecsID 
+//                INNER JOIN rental on rental.ID = car.ID
+//WHERE car.ID = '$car_id' AND carspecs.ID = '$car_spec_id';";
+//    $result = mysqli_query($db_server, $query);
+//    return $result;
+//}
