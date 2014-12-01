@@ -27,8 +27,8 @@ if (isset($_POST['type']) && is_session_active()) {
             $car_spec_id = $_POST['car_spec_id'];
             create_rental_record($car_id, $db_server);
             $result = update_car_status($car_id, $car_spec_id, $db_server);
+            
             if ($result) {
-                //create_rental_record($car_id, $db_server);
                 echo "success";
             }
             break;
@@ -67,7 +67,7 @@ function get_max_rental_id($db_server) {
     $next_id = $id + 1;
     return $next_id;
 }
-
+// when the car is rented, updates car.status
 function update_car_status($car_id, $car_spec_id, $db_server) {
     $query = "UPDATE car 
                 INNER JOIN carspecs ON carspecs.ID = car.CarSpecsID
@@ -76,7 +76,7 @@ function update_car_status($car_id, $car_spec_id, $db_server) {
     $result = mysqli_query($db_server, $query);
     return $result;
 }
-
+// when the car is rented, creates a new rental record
 function create_rental_record($car_id, $db_server) {
     $next_id = get_max_rental_id($db_server);
     $query2 = "INSERT INTO cars.rental (ID, rentDate, returnDate, status, CustomerID, carID) 
@@ -84,7 +84,7 @@ function create_rental_record($car_id, $db_server) {
     $result = mysqli_query($db_server, $query2);
 }
 
-// when the car is returned
+// when the car is returned, update the corresponding rental record
 function update_rental_record($car_id, $car_spec_id, $db_server) {
     $query = "UPDATE rental 
 INNER JOIN car on car.ID = rental.carID

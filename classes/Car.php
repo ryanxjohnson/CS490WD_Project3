@@ -86,8 +86,7 @@ class Car {
     public function get_rental_history() {
         return "SELECT carspecs.Make, carspecs.Model, carspecs.Year, carspecs.Size, 
                 car.Color, car.ID as carID, car.picture, car.picture_type, car.status as carStatus, car.CarSpecsID as carspecsID, 
-                (CAST(rental.ID as UNSIGNED)) as rentID,
-                 
+                (CAST(rental.ID as UNSIGNED)) as rentID,      
                 rental.carID as rentalCarID,
                 rental.rentDate as rentDate, 
                 rental.returnDate as returnDate, rental.status as rentStatus 
@@ -150,7 +149,7 @@ class Car {
     /********************/
     /* PRE-QUERY CHECKS */
 
-    // pre: checks the value in the seach field variable. This is probably bad form to access POST like this.
+    // pre: checks the value in the seach field variable.
     // post: returns query as string
     public function search_field_check() {
 
@@ -177,7 +176,6 @@ class Car {
         $cars_found = "";
         $car_id = $row['carID'];
         $car_spec_id = $row['carspecsID'];
-
         echo $cars_found.=" 
         <div class='search_item'>
             <img src='data:" . $row['picture_type'] . ";base64," . base64_encode($row['picture']) . "'>
@@ -194,8 +192,7 @@ class Car {
             </div> 
         </div>
         <div id='rent' class='car_rent' onclick='rent_car(" . $car_id . "," . $car_spec_id . ")'> Rent Car
-        </div>
-    </div>";
+        </div></div>";
     }
 
     // Builds results for Rented Cars and Rental History.
