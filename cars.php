@@ -8,6 +8,9 @@ session_start();
 if (isset($_POST['type']) && is_session_active()) { //&& session_start < 5 minutes
     $type = $_POST['type'];
     //var_dump($_POST);die;
+    session_regenerate_id(); //regenerate the session to prevent fixation
+    $_SESSION['start']=time();//reset the session start time
+    
     switch ($type) {
         case "name":
             echo $name = $_SESSION["real_name"];
@@ -45,6 +48,9 @@ if (isset($_POST['type']) && is_session_active()) { //&& session_start < 5 minut
             }
             break;
     }
+}
+else {
+    echo "redirect"; //the session is not active, tell JS to redirect
 }
 
 function is_session_active() {
