@@ -1,4 +1,8 @@
 <?php
+/*
+ * CS490_Project 3  - Ryan, Jose, Anthony, Alicia
+ */
+
 include "config/db_connection.php";
 require_once("/classes/Car.php");
 

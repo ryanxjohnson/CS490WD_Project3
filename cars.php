@@ -1,8 +1,11 @@
 <?php
+/*
+ * CS490_Project 3  - Ryan, Jose, Anthony, Alicia
+ */
 include "connection.php";
 session_start();
 
-if (isset($_POST['type']) && is_session_active()) {
+if (isset($_POST['type']) && is_session_active()) { //&& session_start < 5 minutes
     $type = $_POST['type'];
     //var_dump($_POST);die;
     switch ($type) {

@@ -1,4 +1,6 @@
-/* This file is good */
+/*
+ * CS490_Project 3  - Ryan, Jose, Anthony, Alicia
+ */
 
 
 function ajaxObject() {

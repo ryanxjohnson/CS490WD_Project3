@@ -1,5 +1,7 @@
 <?php 
-
+/*
+ * CS490_Project 3  - Ryan, Jose, Anthony, Alicia
+ */
 
   $db_hostname = 'localhost';
   $db_database = "cars";

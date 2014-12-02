@@ -5,6 +5,9 @@
  * To change this template file, choose Tools | Templates
  * and open the template in the editor.
  */
+/*
+ * CS490_Project 3  - Ryan, Jose, Anthony, Alicia
+ */
 
 /**
  * Description of Car
