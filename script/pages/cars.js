@@ -56,6 +56,8 @@ function find_car() {
     $("find_car_loading").className = "loading";
     ajax.onreadystatechange = function () {
         if (ajax.readyState === 4 && ajax.status === 200) {
+            //var cars = ajax.responseText;
+            
             $("search_results").innerHTML = ajax.responseText;
             $("find_car_loading").className = "loading_hidden";
         }

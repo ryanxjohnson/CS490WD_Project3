@@ -50,11 +50,11 @@ class Car {
         $LIKE.=$this->LIKE("Make", $words);
         $LIKE.=" OR " . $this->LIKE("Model", $words);
         $LIKE.=" OR " . $this->LIKE("Color", $words);
-        $LIKE.=" OR " . $this->LIKE("Size", $words);
+            $LIKE.=" OR " . $this->LIKE("Size", $words);
         $LIKE.=" OR " . $this->LIKE("Year", $words);
 
         $order_by = " ORDER BY carspecs.Year ";
-
+        //$order_by = $this->order_by();
         return "SELECT car.ID as carID, car.CarSpecsID as carspecsID, carspecs.Make, carspecs.Model, carspecs.Year, carspecs.Size, 
                 car.Color,  car.picture, car.picture_type, car.status as carStatus 
                 FROM car 
@@ -62,11 +62,30 @@ class Car {
                 WHERE car.status= 1 AND ($LIKE) $order_by";
     }
 
-    // pre: status = 1 and search_field empty
-    public function get_available_cars() {
+    // pre: status = 1 and 
+    // 
+    // 
+    // search_field empty
+    public function get_available_cars(
+            
+            ) {
         return "SELECT car.ID as carID, car.CarSpecsID as carspecsID, carspecs.Make, carspecs.Model, carspecs.Year, carspecs.Size, 
                 car.Color,  car.picture, car.picture_type, car.status as carStatus 
                 FROM car 
+                
+
+
+
+
+
+
+
+
+
+
+
+
+
                 INNER JOIN carspecs on carspecs.ID = car.carspecsID 
                 WHERE car.status= 1 ORDER BY Year";
     }
