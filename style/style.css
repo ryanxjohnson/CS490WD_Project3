@@ -447,3 +447,23 @@ img#message_loading{
     height:25px;
     width:25px;
 }
+
+/* Register*/
+
+.success{
+    display:inline;
+    background-color:green;
+    color:black;
+    border-radius:3px;
+}
+
+.name{
+    text-align:right;
+}
+
+.label{
+    padding:0px;
+    padding-left:5px;
+    padding-bottom:10px;
+    font-size:10px;
+}

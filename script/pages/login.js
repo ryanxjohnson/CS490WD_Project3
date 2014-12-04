@@ -37,7 +37,7 @@ function login() {
         }
         }
     };
-    ajax.open("POST", "login_session.php"); //login_session.php
+    ajax.open("POST", "login_session.php");
     ajax.send(formData);
 }
 

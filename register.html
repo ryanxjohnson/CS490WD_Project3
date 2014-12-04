@@ -1,0 +1,38 @@
+<!DOCTYPE html>
+<!--
+To change this license header, choose License Headers in Project Properties.
+To change this template file, choose Tools | Templates
+and open the template in the editor.
+-->
+<html>
+    <head>
+        <title>Register Account</title>
+        <meta charset="UTF-8">
+        <meta name="viewport" content="width=device-width, initial-scale=1.0">
+        <script src="script/register.js"></script>
+        <link rel="stylesheet" type="text/css" href="style/style.css">
+    </head>
+    <body>
+        <div class="insertion_error" id="insertion_error"></div>
+        <div class="success" id="success"></div>
+        <form  id="register" method="post" enctype="multipart/form-data">
+            <table>
+                <tr>
+                    <td class="name">User ID:</td>
+                    <td><input type="text" name="id"></td><td id='id_error' class="error"></td>
+                </tr>
+                <tr>
+                    <td class="name">Full Name:</td>
+                    <td><input type="text" name="fname"></td><td id="fname_error" class="error"></td>
+                </tr>
+                <tr>
+                    <td class="name">Password:</td>
+                    <td><input type="password" name="password"></td><td id="password_error" class="error"></td>
+                </tr>
+
+                <tr><td></td><td class="submit"><div onclick="validate_user()" class="button">Submit</div></td><td></td></tr>
+            </table>
+        </form>
+        <a href="index.html">Back to Login</a>
+    </body>
+</html>
