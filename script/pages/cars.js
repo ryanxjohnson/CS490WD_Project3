@@ -65,6 +65,41 @@ function find_car() {
     ajax.open("POST", "cars.php");
     ajax.send(data);
 }
+function sort(type){
+    var divs = $("search_results");
+    var cars = document.getElementsByClassName("search_item");
+    var info = document.getElementsByClassName(type);
+    var sortme = []; // container to sort divs
+   
+   for(var i = 0; i < cars.length; i++){
+        
+        var detail = info[i].innerHTML;//information to sort by
+       if(type === "car_model"){ // if sorting by year we only want the year
+           var modelAndYear = detail.toString();
+           var year = [];
+           year = modelAndYear.split('|'); //split model and year
+           detail = parseInt(year[1]);
+       }
+        sortme.push([detail, cars[i]]);
+       
+   } 
+   sortme.sort(function(a, b){
+       var A = a[0].toString();
+       var B = b[0].toString();
+       if(A === B)
+           return 0;
+       if(A > B)
+           return 1;
+       else
+           return -1;
+       
+   });
+   //append the page with sorted divs
+   for (var i = 0; i < info.length; i++){
+       divs.appendChild(sortme[i][1]);    
+   }
+   }
+   
 
 function show_info(type, id) {
     var data = new FormData();

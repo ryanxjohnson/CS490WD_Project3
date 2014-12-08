@@ -36,6 +36,10 @@ and open the template in the editor.
                             <div onclick="find_car();" class="search_button">
                                 <img src="images/glass.png"></div>
                         </div>
+                        <select id="sort" name ="sort" onchange="sort(this.value)">
+                            <option  value="car_model">Year</option>
+                            <option  value="car_make">Make</option>
+                        </select>
                         <img id="find_car_loading" class="loading_hidden" src="images/loading.gif">
                         <div id="search_results">
                         </div>
