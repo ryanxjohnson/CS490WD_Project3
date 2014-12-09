@@ -14,32 +14,24 @@ function ajaxObject() {
 
     return ajax;
 }
-
 function $(id) {
     return document.getElementById(id);
 }
 
-function validate_students_key(event) {
-    if (event.keyCode == 13) //ENTER KEY
-        validate_student();
-}
-
-function validate_user() {
-    $("success").innerHTML = "Inserted Successully";
-    var ajax = ajaxObject();
-    var form = $("register");
+function validate_student() {   
+    var form=$("add_customer");
     var data = new FormData(form);
-    data.append("register",$("register").value);
+    
+    var ajax = ajaxObject();
     ajax.onreadystatechange = function() {
-        if (ajax.readyState === 4 && ajax.status === 200){       
-            if (ajax.responseText = "success"){
-                 window.location.assign("index.html");
-            //var msg = JSON.parse(ajax.responseText.trim());
-                $("success").innerHTML = "Inserted Successully";
+        if (ajax.readyState === 4 && ajax.status === 200) {
+            var messages = JSON.parse(ajax.responseText);
+            console.log(messages);
+            for (var key in messages) {
+                $(key).innerHTML = messages[key];
             }
-
         }
     };
     ajax.open("POST", "register.php");
-    ajax.send(data);
+    ajax.send(data); //send the data
 }
