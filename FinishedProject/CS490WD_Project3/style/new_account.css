@@ -1,0 +1,45 @@
+td{
+    padding:5px;
+}
+
+td.submit{
+    padding-top:15px;
+}
+
+.button{
+    background-color:rgb(22,122,198);
+    border-color:rgb(22,122,198);
+    color:white;
+    border-radius:5px;
+    display:inline;
+    padding:5px;
+}
+
+.button:hover{
+    background-color:rgb(18,109,179);
+    border-color:rgb(18,109,179);
+    cursor:pointer;
+}
+
+td.error{
+    color:red;
+    padding-left:0px;
+}
+
+.insertion_error{
+    display:inline;
+    background-color:red;
+    color:white;
+    border-radius:3px;
+}
+
+.success{
+    display:inline;
+    background-color:green;
+    color:white;
+    border-radius:3px;
+}
+
+.name{
+    text-align:right;
+}
