@@ -1,8 +1,3 @@
-/*div.car_rent{
-    
-}*/
-
-
 div.login{
     padding-top:25px;
     border: lightgray solid 1px;
@@ -62,7 +57,6 @@ img.loading_hidden{
     padding-top:4px;
 }
 
-
 .button:hover,.car_rent:hover{
     background-color:rgb(18,109,179);
     border-color:rgb(18,109,179);
@@ -98,7 +92,6 @@ div.account img{
     src: url(Savor.ttf);
 }
 
-
 div.account p{
     position: absolute;
     font-family:ferro;
@@ -130,11 +123,13 @@ div.welcome a{
     border-left: 1px solid lightgray;
     margin:5px;
 }
+
 div.welcome a:hover{
     text-decoration: underline;
     color:darkred;   
     cursor:pointer;
 }
+
 div.welcome img.user_loading,img.user_loading_hidden{
     position:relative;
     float:right;
@@ -182,7 +177,6 @@ div.search_item .car_make_background{
     border-radius:5px;
     width:210px;
     height:80px;
-    
 }
 
 div.search_item .car_make{
@@ -231,8 +225,6 @@ div.search_item .car_rent{
     opacity:0;
 }
 
-
-
 div.search_item .car_color{
     position:absolute;
     padding:5px;
@@ -279,13 +271,13 @@ th{
     border-bottom:1px solid lightgray;
     padding:5px;
 }
+
 td{
     position:relative;
     border-bottom:1px dotted lightgray; 
     height:140px;
     width:175px;
 }
-
 
 td.car_details{
     position:relative;
@@ -337,6 +329,7 @@ td div.car_size,div.rental_ID,div.car_date{
     font-size:13px;
     width:275px;
 }
+
 td div.rental_ID{
     top:83px; 
 }
@@ -344,8 +337,6 @@ td div.rental_ID{
 td div.car_date{
     top:105px; 
 }
-
-
 
 tr:hover div.return_car{
     opacity:1;
@@ -360,7 +351,6 @@ td div.return_car{
     border-radius: 5px;
     opacity:0;
 }
-
 
 td div.return_car:hover{
     background-color:rgb(18,109,179);
@@ -435,8 +425,6 @@ div.close_button:hover{
     
 }
 
-
-
 img#message_loading,img#returned_car_loading,img#rented_car_loading,img#find_car_loading{
     left:10px;
 }
@@ -449,7 +437,6 @@ img#message_loading{
 }
 
 /* Register*/
-
 .success{
     display:inline;
     background-color:green;

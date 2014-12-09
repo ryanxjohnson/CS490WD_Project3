@@ -1,4 +1,5 @@
 <?php
+
 /*
  * CS490_Project 3  - Ryan, Jose, Anthony, Alicia
  */
@@ -9,8 +10,8 @@ if (isset($_POST['type']) && is_session_active()) { //&& session_start < 5 minut
     $type = $_POST['type'];
     //var_dump($_POST);die;
     session_regenerate_id(); //regenerate the session to prevent fixation
-    $_SESSION['start']=time();//reset the session start time
-    
+    $_SESSION['start'] = time(); //reset the session start time
+
     switch ($type) {
         case "name":
             echo $name = $_SESSION["real_name"];
@@ -33,7 +34,7 @@ if (isset($_POST['type']) && is_session_active()) { //&& session_start < 5 minut
             $car_spec_id = $_POST['car_spec_id'];
             create_rental_record($car_id, $db_server);
             $result = update_car_status($car_id, $car_spec_id, $db_server);
-            
+
             if ($result) {
                 echo "success";
             }
@@ -41,15 +42,14 @@ if (isset($_POST['type']) && is_session_active()) { //&& session_start < 5 minut
         case "return":
             $car_id = $_POST['car_id'];
             $car_spec_id = $_POST['car_spec_id'];
-            
+
             $result = update_rental_record($car_id, $car_spec_id, $db_server);
             if ($result) {
                 echo "success";
             }
             break;
     }
-}
-else {
+} else {
     echo "please wait..."; //the server hasn't finished returning results yet
 }
 
@@ -76,6 +76,7 @@ function get_max_rental_id($db_server) {
     $next_id = $id + 1;
     return $next_id;
 }
+
 // when the car is rented, updates car.status
 function update_car_status($car_id, $car_spec_id, $db_server) {
     $query = "UPDATE car 
@@ -85,11 +86,12 @@ function update_car_status($car_id, $car_spec_id, $db_server) {
     $result = mysqli_query($db_server, $query);
     return $result;
 }
+
 // when the car is rented, creates a new rental record
 function create_rental_record($car_id, $db_server) {
     $next_id = get_max_rental_id($db_server);
     $query2 = "INSERT INTO cars.rental (ID, rentDate, returnDate, status, CustomerID, carID) 
-	VALUES ('$next_id', '".date("Y-m-d")."', 0000-01-01, 2, '" . $_SESSION["username"] . "', '$car_id');";
+	VALUES ('$next_id', '" . date("Y-m-d") . "', 0000-01-01, 2, '" . $_SESSION["username"] . "', '$car_id');";
     $result = mysqli_query($db_server, $query2);
 }
 
@@ -98,7 +100,7 @@ function update_rental_record($car_id, $car_spec_id, $db_server) {
     $query = "UPDATE rental 
 INNER JOIN car on car.ID = rental.carID
  INNER JOIN carspecs on carspecs.ID = car.carspecsID 
-                SET rental.status='1', rental.returnDate='".date("Y-m-d")."', car.status='1'
+                SET rental.status='1', rental.returnDate='" . date("Y-m-d") . "', car.status='1'
                 WHERE car.ID='$car_id' AND car.carspecsID='$car_spec_id' AND rental.CustomerID='" . $_SESSION["username"] . "' ;";
     $result = mysqli_query($db_server, $query);
     return $result;

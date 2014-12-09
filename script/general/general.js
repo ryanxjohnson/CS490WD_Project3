@@ -41,7 +41,6 @@ function show_tab(tab){
 }
 
 // a function that makes a field look like a search box
-
 function make_search_field(key, initial_text){
     
     var element=$(key);

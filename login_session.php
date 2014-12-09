@@ -9,7 +9,6 @@ if (isset($_POST['name']) && isset($_POST['password'])) {
 
     $username = sanitizeMYSQL($_POST['name']);
     $password=md5(sanitizeMYSQL($_POST['password']));
-    //$password = md5('web' . sanitizeMYSQL($_POST['password']) . 'web');
 
     $query = "SELECT * FROM customer WHERE ID='".$username."' AND Password='".$password."'";
 
@@ -26,8 +25,6 @@ if (isset($_POST['name']) && isset($_POST['password'])) {
        ini_set('session.gc_maxlifetime',60*5); //the life time of the session is 5 minutes
         $_SESSION["username"] =$row["ID"];  
         $_SESSION["real_name"] =$row["Name"]; 
-        //$_SESSION['start'] = time(); //we set that to make the session expire after some time
-
     }
     else
         $text="Invalid username or password"; 

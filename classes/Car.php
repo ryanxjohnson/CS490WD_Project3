@@ -15,17 +15,15 @@
  * @author Ryan
  */
 class Car {
-/*
- * For the future...
- * private $db_connection = null;
- * private $car_id;
- * private $car_specs_id;
- *  
-*/
-    public function __construct() {
+    /*
+     * For the future...
+     * private $db_connection = null;
+     * private $car_id;
+     * private $car_specs_id; 
+     */
 
+    public function __construct() {
         $this->db_connection = new mysqli(DB_HOST, DB_USER, DB_PASS, DB_NAME);
-        
     }
 
     /* SQL STATEMENTS */
@@ -61,8 +59,9 @@ class Car {
     }
 
     public function get_rented_cars() {
+        $user = $_SESSION['username'];
         return "SELECT car.CarSpecsID as carspecsID, carspecs.Make, carspecs.Model, carspecs.Year, carspecs.Size, 
-                car.Color, car.ID as carID, car.picture, car.picture_type, car.status as carStatus, 
+                car.Color, car.ID as carID, car.picture, car.picture_type, car.status as carStatus, rental.CustomerID,
                 (CAST(rental.ID as UNSIGNED)) as rentID,
                 rental.carID as rentalCarID,
                 rental.rentDate as rentDate, 
@@ -70,7 +69,7 @@ class Car {
                 FROM car 
                 INNER JOIN carspecs on carspecs.ID = car.carspecsID 
                 INNER JOIN rental on rental.carID = car.ID
-                WHERE car.status= 2 AND rental.status=2";
+                WHERE car.status= 2 AND rental.status=2 AND rental.CustomerID='$user'";
     }
 
     public function get_rental_history() {
@@ -86,7 +85,7 @@ class Car {
                 INNER JOIN customer on rental.CustomerID = customer.ID 
                 WHERE car.status='1' and rental.status='1' ORDER BY rentID DESC";
     }
-    
+
     /* TOKENIZE SEARCH */
     function LIKE($column, $words) {
         $LIKE = "";
@@ -112,7 +111,6 @@ class Car {
     }
 
     /* QUERY HELPERS */
-
     //pre: already queried with instantiated object. 
     //parameters: query string and HTML builder function
     public function print_results($query, $function) {
@@ -135,7 +133,6 @@ class Car {
     }
 
     /* PRE-QUERY CHECKS */
-
     // pre: checks the value in the search field variable.
     // post: returns query as string
     public function search_field_check() {
@@ -156,7 +153,6 @@ class Car {
     }
 
     /* HTML BUILDERS */
-
     // Builds results for Find Car
     // pre: already queried and have results. 
     public function build_searched_car($row) {

@@ -16,7 +16,6 @@ function sanitizeString($var){
 }
 
 function sanitizeMYSQL($var){
-    //$var = mysql_real_escape_string($var); //Escapes special characters in a string for use in an SQL statement
     $var=  sanitizeString($var);
     return $var;
 }
