@@ -50,7 +50,7 @@ if (isset($_POST['type']) && is_session_active()) { //&& session_start < 5 minut
     }
 }
 else {
-    echo "redirect"; //the session is not active, tell JS to redirect
+    echo "please wait..."; //the server hasn't finished returning results yet
 }
 
 function is_session_active() {
@@ -103,12 +103,3 @@ INNER JOIN car on car.ID = rental.carID
     $result = mysqli_query($db_server, $query);
     return $result;
 }
-
-//function get_current_status($car_id, $car_spec_id, $db_server) {
-//    $query = "select car.ID, carspecs.ID, car.status, rental.carID from car
-//                INNER JOIN carspecs on carspecs.ID = car.carspecsID 
-//                INNER JOIN rental on rental.ID = car.ID
-//WHERE car.ID = '$car_id' AND carspecs.ID = '$car_spec_id';";
-//    $result = mysqli_query($db_server, $query);
-//    return $result;
-//}

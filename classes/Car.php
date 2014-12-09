@@ -15,30 +15,20 @@
  * @author Ryan
  */
 class Car {
-
-    private $db_connection = null;
-    public $errors = array();
-    public $messages = array();
-
+/*
+ * For the future...
+ * private $db_connection = null;
+ * private $car_id;
+ * private $car_specs_id;
+ *  
+*/
     public function __construct() {
 
-
-        // create a database connection, using the constants from config/db_connection.php (which we loaded in index.php)
         $this->db_connection = new mysqli(DB_HOST, DB_USER, DB_PASS, DB_NAME);
-
-        // placeholder for future expansion
-        if (!$this->db_connection->set_charset("utf8")) {
-            $this->errors[] = $this->db_connection->error;
-        }
-
-        if (!$this->db_connection->connect_errno) {
-            $this->errors[] = $this->db_connection->error;
-        }
+        
     }
-    /********************/
-    /* SQL STATEMENTS */
 
-    // pre: no params. returns all cars
+    /* SQL STATEMENTS */
     public function get_all_cars() {
         return "SELECT * FROM car INNER JOIN carspecs on carspecs.ID = car.CarSpecsID";
     }
@@ -50,7 +40,7 @@ class Car {
         $LIKE.=$this->LIKE("Make", $words);
         $LIKE.=" OR " . $this->LIKE("Model", $words);
         $LIKE.=" OR " . $this->LIKE("Color", $words);
-            $LIKE.=" OR " . $this->LIKE("Size", $words);
+        $LIKE.=" OR " . $this->LIKE("Size", $words);
         $LIKE.=" OR " . $this->LIKE("Year", $words);
 
         $order_by = " ORDER BY carspecs.Year ";
@@ -62,35 +52,14 @@ class Car {
                 WHERE car.status= 1 AND ($LIKE) $order_by";
     }
 
-    // pre: status = 1 and 
-    // 
-    // 
-    // search_field empty
-    public function get_available_cars(
-            
-            ) {
+    public function get_available_cars() {
         return "SELECT car.ID as carID, car.CarSpecsID as carspecsID, carspecs.Make, carspecs.Model, carspecs.Year, carspecs.Size, 
                 car.Color,  car.picture, car.picture_type, car.status as carStatus 
                 FROM car 
-                
-
-
-
-
-
-
-
-
-
-
-
-
-
                 INNER JOIN carspecs on carspecs.ID = car.carspecsID 
                 WHERE car.status= 1 ORDER BY Year";
     }
 
-    // pre: status = 2
     public function get_rented_cars() {
         return "SELECT car.CarSpecsID as carspecsID, carspecs.Make, carspecs.Model, carspecs.Year, carspecs.Size, 
                 car.Color, car.ID as carID, car.picture, car.picture_type, car.status as carStatus, 
@@ -104,7 +73,6 @@ class Car {
                 WHERE car.status= 2 AND rental.status=2";
     }
 
-    // pre: post: returns all cars that have been rented, then returned
     public function get_rental_history() {
         return "SELECT carspecs.Make, carspecs.Model, carspecs.Year, carspecs.Size, 
                 car.Color, car.ID as carID, car.picture, car.picture_type, car.status as carStatus, car.CarSpecsID as carspecsID, 
@@ -118,9 +86,8 @@ class Car {
                 INNER JOIN customer on rental.CustomerID = customer.ID 
                 WHERE car.status='1' and rental.status='1' ORDER BY rentID DESC";
     }
-    /********************/
+    
     /* TOKENIZE SEARCH */
-
     function LIKE($column, $words) {
         $LIKE = "";
         $index = 0;
@@ -135,7 +102,6 @@ class Car {
     }
 
     function tokenize($data, $delimiter = ",") {
-
         $array = array();
         $token = strtok($data, $delimiter);
         while ($token !== false) {
@@ -144,7 +110,7 @@ class Car {
         }
         return $array;
     }
-    /********************/
+
     /* QUERY HELPERS */
 
     //pre: already queried with instantiated object. 
@@ -167,11 +133,10 @@ class Car {
         }
         return $result;
     }
-    
-    /********************/
+
     /* PRE-QUERY CHECKS */
 
-    // pre: checks the value in the seach field variable.
+    // pre: checks the value in the search field variable.
     // post: returns query as string
     public function search_field_check() {
 
@@ -189,7 +154,7 @@ class Car {
             return $this->get_available_cars();
         }
     }
-    /********************/
+
     /* HTML BUILDERS */
 
     // Builds results for Find Car
@@ -218,7 +183,7 @@ class Car {
     }
 
     // Builds results for Rented Cars and Rental History.
-    // checks current status to determine rented/returned and if the button div is shown
+    // checks current status to determine rented/returned and if the button is shown
     public function build_tainted_car($row) {
         $cars_found = "";
         $car_id = $row['carID'];
@@ -265,4 +230,4 @@ class Car {
                    " . $show_button . "                
             </tr>";
     }
-} // end of Car
+}
